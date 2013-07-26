@@ -212,6 +212,11 @@ public class Graph {
 	}
 	
 	//otimizado para: lists
+	/**
+	 * Returns a list that contains the reachable nodes from node.
+	 * @param source
+	 * @return
+	 */
 	public List<Integer> getSuccessors(int node) {
 		List<Integer> succ = new LinkedList<Integer>();
 		
@@ -231,7 +236,7 @@ public class Graph {
 		return succ;
 	}
 	
-	//otimizado para: lists 
+	//otimizado para: lists
 	public List<Edge> getOutEdges(int source) {
 		List<Edge> succ = new LinkedList<Edge>();
 		
