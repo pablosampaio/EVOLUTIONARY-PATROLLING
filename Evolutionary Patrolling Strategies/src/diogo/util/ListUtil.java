@@ -13,6 +13,28 @@ public class ListUtil {
 	}
 	
 	
+	/**
+	 * Não INCLUSIVO!!!!!!!
+	 * @param start
+	 * @param end
+	 * @param increment
+	 * @return
+	 */
+	public static List<Integer> createIndexList(int start, int end, int increment){
+		
+		ArrayList<Integer> list = new ArrayList<Integer>();
+		
+		for(int i = start; i < end; i+=increment){
+			list.add(i);
+			
+		}
+	
+		
+		return list;
+	}
+	
+
+	
 	public static <T> List<T> randomChoose(int numOfItens, List<T> list){
 		
 		int listSize = list.size();

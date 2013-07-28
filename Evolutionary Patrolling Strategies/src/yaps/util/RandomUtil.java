@@ -1,5 +1,8 @@
 package yaps.util;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 
 public class RandomUtil {
@@ -36,5 +39,31 @@ public class RandomUtil {
 		
 		return weights.length - 1; //nunca devera acontecer!
 	}
+	
+	
+	/**
+	 * Escolhe um double entre zero e 1(exclusivo).
+	 * 
+	 */
+	public static double getUniformDouble(){
+		return rand.nextDouble();
+	}
+	
+	/**
+	 * Escolhe um boolean entre zero e 1(exclusivo).
+	 * 
+	 */
+	public static boolean getHeadTailTrow(){
+		return rand.nextBoolean();
+	}
+	
+	
+	public static <T> List<T> shuffle(List<T> l){
+		List<T> ls = new ArrayList<T>();
+		ls.addAll(l);
+		Collections.shuffle(ls, rand);
+		return ls;
+	}
+
 
 }
