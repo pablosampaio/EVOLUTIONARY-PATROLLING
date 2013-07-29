@@ -1,13 +1,14 @@
-package diogo;
+package taia;
 
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
+import taia.util.ListUtil;
+
 import yaps.graph_library.Path;
 import yaps.graph_library.algorithms.AllPairsShortestPaths;
 import yaps.util.RandomUtil;
-import diogo.util.ListUtil;
 
 public class GraphEquipartition {
 
@@ -28,6 +29,7 @@ public class GraphEquipartition {
 		return distance;
 	}
 
+	@SuppressWarnings("unused")
 	private static double sumDistancies(Integer[] nis, AllPairsShortestPaths p){
 
 		double distance = 0;
@@ -137,6 +139,7 @@ public class GraphEquipartition {
 	}
 
 
+	@SuppressWarnings("unused")
 	private static boolean includeNextWithPath(Integer cntr, Integer[] cntrList, List<Integer> ngborList, AllPairsShortestPaths allp){
 
 		while(!ngborList.isEmpty()){

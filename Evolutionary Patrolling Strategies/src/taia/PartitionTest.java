@@ -1,4 +1,4 @@
-package diogo;
+package taia;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -28,7 +28,7 @@ public class PartitionTest {
 			pathMap.put(c, PathBuilder.nearestInsertionMethod(graphMap.get(c)));
 		}
 		
-		int j =0;
+		//int j =0;
 		
 	}
 

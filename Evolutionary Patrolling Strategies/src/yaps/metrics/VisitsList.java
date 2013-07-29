@@ -221,7 +221,7 @@ public class VisitsList {
 			
 			if(j == other.visitList.size()){
 				while(i < this.visitList.size()){
-					newList.add(this.visitList.get(j));
+					newList.add(this.visitList.get(i));
 					i++;
 				}
 				break;

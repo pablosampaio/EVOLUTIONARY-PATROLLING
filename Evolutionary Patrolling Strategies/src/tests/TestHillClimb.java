@@ -47,7 +47,7 @@ public class TestHillClimb {
 					p,  sg);
 
 			VisitsList v2 = getVisitTimes(p2, g, simulationTime);
-			IntervalMetricsReport intervalReport2 = new IntervalMetricsReport(g.getNumEdges(), 1, simulationTime, v2);
+			IntervalMetricsReport intervalReport2 = new IntervalMetricsReport(g.getNumNodes(), 1, simulationTime, v2);
 
 			if(intervalReport.getAverageInterval() > intervalReport2.getAverageInterval()){
 				p = p2;

@@ -1,4 +1,4 @@
-package diogo;
+package taia;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -6,7 +6,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-import diogo.util.ListUtil;
+import taia.util.ListUtil;
+
 import yaps.graph_library.GraphReader;
 import yaps.graph_library.NodeSelectedSubGraph;
 import yaps.graph_library.Path;
@@ -110,15 +111,12 @@ public class SimpleIndividual {
 		return i;
 	}
 	
-	public VisitsList acessVisitList(){
+	public VisitsList generateVisitList(int simulationTime){
 		
 		VisitsList v = new VisitsList();
-		Path p;
-		
-		
+
 		for(Integer n: agentList){
-			p = this.agents.get(n);
-			
+			v.addVisitList( ClosedPathFacility.fromClosedPathToVisitList(this.agents.get(n), this.graph, simulationTime, n));			
 		}
 		
 		return v;
@@ -312,7 +310,8 @@ public class SimpleIndividual {
 		i1.tweak();
 		i2.tweak();
 		
-		 SimpleIndividual[] newS = SimpleIndividual.crossOver(i1, i2);
+		 @SuppressWarnings("unused")
+		SimpleIndividual[] newS = SimpleIndividual.crossOver(i1, i2);
 		 
 		 int i = 0;
 		 
