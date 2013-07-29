@@ -77,8 +77,9 @@ public class HillClimb {
 		System.out.println("Initial metric value:  " + bestMetric);
 		
 		while(numberIterations-- > 0){
+			//System.out.println("Before Tweak:"+s);
 			r = s.tweakCopy();
-			System.out.println("Before Tweak:"+s+"\nAfter Tweak:"+r);
+			//System.out.println("After Tweak:"+r);
 			rIntervalReport = new IntervalMetricsReport(numOFNodes, 1, simulationTime, r.generateVisitList(simulationTime));
 			metric = rIntervalReport.getAverageInterval();
 			

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import yaps.graph_library.Graph;
+import yaps.graph_library.GraphDataRepr;
 import yaps.graph_library.GraphReader;
 import yaps.graph_library.NodeSelectedSubGraph;
 import yaps.graph_library.Path;
@@ -52,6 +53,7 @@ public class TestHillClimb {
 			if(intervalReport.getAverageInterval() > intervalReport2.getAverageInterval()){
 				p = p2;
 				intervalReport = intervalReport2;
+				System.out.println("Cost:  " + intervalReport.getAverageInterval());
 
 			}
 		}
@@ -64,6 +66,7 @@ public class TestHillClimb {
 
 		VisitsList v = new VisitsList();
 
+		g.changeRepresentation(GraphDataRepr.LISTS);
 		int lastTime = 1;
 		v.addVisit(lastTime, p.getFirst());
 

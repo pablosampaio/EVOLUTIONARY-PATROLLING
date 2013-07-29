@@ -101,11 +101,24 @@ public class SimpleIndividual {
 
 	} 
 
+	
+	private void testEmptyPath(){
+		for(Integer n: agentList){
+			if(agents.get(n).isEmpty()){
+				System.exit(-1);
+			}			
+		}
+		
+		
+	}
+	
+	
 	public SimpleIndividual tweakCopy(){
 		SimpleIndividual i = new SimpleIndividual(this);
 		
 		while(this.equals(i)){
 			i.tweak();
+			
 		}
 		
 		return i;
@@ -145,7 +158,7 @@ public class SimpleIndividual {
 			
 			AllPairsShortestPaths allp = graph.getAllPaths();
 			
-			Path path = allp.getPath(node, RandomUtil.chooseInteger(0, graph.getNumNodes() - 1 ));
+			Path path = allp.getPath(agentFixedNode, node);
 			
 			for(Integer n: path){
 			
@@ -178,7 +191,9 @@ public class SimpleIndividual {
 			Integer electedNode;
 			NodeSelectedSubGraph sg;
 			
-			for(int i: RandomUtil.shuffle(ListUtil.createIndexList(0, nodes.size(), 1))){
+			List<Integer> shuffeledNodeList = RandomUtil.shuffle(ListUtil.createIndexList(0, nodes.size(), 1));
+			
+			for(int i: shuffeledNodeList){
 				
 				electedNode = nodes.remove(i);
 				
