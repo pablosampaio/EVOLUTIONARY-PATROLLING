@@ -27,6 +27,7 @@ public class Graph {
 	
 	private  GraphDataRepr representation; // indicate which of the structures above are used
 	
+	private Graph(){}
 	
 	public Graph(int numVertices) {
 		this(numVertices, GraphDataRepr.LISTS);

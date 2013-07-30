@@ -7,10 +7,13 @@ import yaps.graph_library.algorithms.AllPairsShortestPaths;
 import yaps.util.RandomUtil;
 
 public class PathBuilder {
-
+	
+	public static final int NearestNeighborMethod = 0;
+	public static final int NearestInsertionMethod = 1;
+	
 	private static final int INFINITE = Integer.MAX_VALUE / 2;
 
-	public static Path nearestNeighborMethod(NodeSelectedSubGraph g){
+	public static Path nearestNeighborMethod(InducedSubGraph g){
 
 		List<Integer> nodes = g.getNodesList();
 
@@ -153,7 +156,7 @@ public class PathBuilder {
 		return allPaths.getDistance(iNode, kNode) + allPaths.getDistance(kNode, jNode) - allPaths.getDistance(iNode, jNode);
 	}
 
-	public static Path nearestInsertionMethod(NodeSelectedSubGraph g){
+	public static Path nearestInsertionMethod(InducedSubGraph g){
 
 		List<Integer> nodes = g.getNodesList();
 
@@ -267,7 +270,7 @@ public class PathBuilder {
 
 
 
-	public static Path twoChange(int edge1, int edge2, Path p, NodeSelectedSubGraph g){
+	public static Path twoChange(int edge1, int edge2, Path p, InducedSubGraph g){
 
 
 		if(edge1 > edge2){

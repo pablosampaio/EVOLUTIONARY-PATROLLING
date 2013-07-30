@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 import yaps.graph_library.Graph;
 import yaps.graph_library.GraphReader;
-import yaps.graph_library.NodeSelectedSubGraph;
+import yaps.graph_library.InducedSubGraph;
 import yaps.graph_library.Path;
 import yaps.graph_library.PathBuilder;
 import yaps.graph_library.algorithms.AllPairsShortestPaths;
@@ -45,7 +45,7 @@ public class TestGraphLibrary {
 		selNodes.add(2);
 		selNodes.add(7);
 		
-		NodeSelectedSubGraph subGraph = new NodeSelectedSubGraph(selNodes, graph);
+		InducedSubGraph subGraph = new InducedSubGraph(selNodes, graph);
 		
 		
 		Path p = PathBuilder.nearestNeighborMethod(subGraph);

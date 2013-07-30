@@ -63,7 +63,7 @@ public class HillClimbWithRandomRestarts extends HillClimb {
 		
 		//S <- Some initial random candidate solution
 		
-		ArrayList<Integer> agentList = new ArrayList<>();
+		ArrayList<Integer> agentList = new ArrayList<Integer>();
 		
 		for(int i = 0; i < numberOfAgents; i++) {
 			
@@ -118,7 +118,7 @@ public class HillClimbWithRandomRestarts extends HillClimb {
 			
 			//S <- Some random candidate solution
 			
-			agentList = new ArrayList<>();
+			agentList = new ArrayList<Integer>();
 			
 			for(int i = 0; i < numberOfAgents; i++) {
 				

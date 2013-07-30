@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 import yaps.graph_library.Graph;
 import yaps.graph_library.GraphReader;
-import yaps.graph_library.NodeSelectedSubGraph;
+import yaps.graph_library.InducedSubGraph;
 import yaps.graph_library.Path;
 import yaps.graph_library.PathBuilder;
 import yaps.metrics.IntervalMetricsReport;
@@ -33,7 +33,7 @@ public class TestSimulatedAnnealing extends TestHillClimb {
 			nodes.add(k);
 		}
 		
-		NodeSelectedSubGraph sg = new NodeSelectedSubGraph(nodes, g);
+		InducedSubGraph sg = new InducedSubGraph(nodes, g);
 
 		Path s = PathBuilder.nearestInsertionMethod(sg);
 		

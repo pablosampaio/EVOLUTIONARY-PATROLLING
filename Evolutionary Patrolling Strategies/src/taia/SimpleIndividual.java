@@ -9,7 +9,7 @@ import java.util.List;
 import taia.util.ListUtil;
 
 import yaps.graph_library.GraphReader;
-import yaps.graph_library.NodeSelectedSubGraph;
+import yaps.graph_library.InducedSubGraph;
 import yaps.graph_library.Path;
 import yaps.graph_library.PathBuilder;
 import yaps.graph_library.algorithms.AllPairsShortestPaths;
@@ -95,22 +95,12 @@ public class SimpleIndividual {
 			}
 			
 			
-			agents.put(n, PathBuilder.nearestInsertionMethod(new NodeSelectedSubGraph(nodes, graph)));
+			agents.put(n, PathBuilder.nearestInsertionMethod(new InducedSubGraph(nodes, graph)));
 			
 		}
 
 	} 
 
-	
-	private void testEmptyPath(){
-		for(Integer n: agentList){
-			if(agents.get(n).isEmpty()){
-				System.exit(-1);
-			}			
-		}
-		
-		
-	}
 	
 	
 	public SimpleIndividual tweakCopy(){
@@ -135,6 +125,82 @@ public class SimpleIndividual {
 		return v;
 	}
 	
+	
+	public void addRandomNode(Integer agent){
+		ArrayList<Integer> nodes = new ArrayList<Integer>();
+		
+		
+		for(Integer n: agents.get(agent)){
+			
+			if(!nodes.contains(n)){
+				nodes.add(n);
+			}
+
+		}
+
+		Integer node = ListUtil.chooseAtRandom(graph.getNodesList());
+		
+		AllPairsShortestPaths allp = graph.getAllPaths();
+		
+		Path path = allp.getPath(agent, node);
+		
+		for(Integer n: path){
+		
+			if(!nodes.contains(n)){
+				nodes.add(n);
+			}
+
+		}
+		
+		agents.put(agent, PathBuilder.nearestInsertionMethod(new InducedSubGraph(nodes, graph)));
+
+	}
+	
+	
+	public void removeRandomNode(Integer agent){
+		
+		LinkedList<Integer> nodes = new LinkedList<Integer>();
+		
+		for(Integer n:  agents.get(agent) ){
+			
+			if(!nodes.contains(n)){
+				nodes.add(n);
+			}
+
+		}
+		
+		if(nodes.size() == 1){
+			return;
+		}
+		
+		Integer electedNode;
+		InducedSubGraph sg;
+		
+		List<Integer> shuffeledNodeList = RandomUtil.shuffle(ListUtil.createIndexList(0, nodes.size(), 1));
+		
+		for(int i: shuffeledNodeList){
+			
+			electedNode = nodes.remove(i);
+			
+			if(electedNode.equals(agent)){
+				nodes.add(i, electedNode);
+				continue;
+			}
+			
+
+			
+			sg = new InducedSubGraph(nodes, graph);
+			
+			if(sg.isConnected()){
+				agents.put(agent, PathBuilder.nearestInsertionMethod(sg));
+				return;
+			}
+			
+			nodes.add(i, electedNode);
+			
+		}
+					
+	}
 	
 	public void tweak(){
 		
@@ -168,7 +234,7 @@ public class SimpleIndividual {
 	
 			}
 			
-			agents.put(agentFixedNode, PathBuilder.nearestInsertionMethod(new NodeSelectedSubGraph(nodes, graph)));
+			agents.put(agentFixedNode, PathBuilder.nearestInsertionMethod(new InducedSubGraph(nodes, graph)));
 			
 
 		}else{
@@ -189,7 +255,7 @@ public class SimpleIndividual {
 			}
 			
 			Integer electedNode;
-			NodeSelectedSubGraph sg;
+			InducedSubGraph sg;
 			
 			List<Integer> shuffeledNodeList = RandomUtil.shuffle(ListUtil.createIndexList(0, nodes.size(), 1));
 			
@@ -204,7 +270,7 @@ public class SimpleIndividual {
 				
 
 				
-				sg = new NodeSelectedSubGraph(nodes, graph);
+				sg = new InducedSubGraph(nodes, graph);
 				
 				if(sg.isConnected()){
 					agents.put(agentFixedNode, PathBuilder.nearestInsertionMethod(sg));
@@ -309,7 +375,7 @@ public class SimpleIndividual {
 	}
 
 	@Override
-	protected Object clone() throws CloneNotSupportedException {
+	public Object clone() throws CloneNotSupportedException {
 		return new SimpleIndividual(this);
 	}
 

@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import yaps.graph_library.Graph;
 import yaps.graph_library.GraphDataRepr;
 import yaps.graph_library.GraphReader;
-import yaps.graph_library.NodeSelectedSubGraph;
+import yaps.graph_library.InducedSubGraph;
 import yaps.graph_library.Path;
 import yaps.graph_library.PathBuilder;
 import yaps.metrics.IntervalMetricsReport;
@@ -31,7 +31,7 @@ public class TestHillClimb {
 		}
 
 
-		NodeSelectedSubGraph sg = new NodeSelectedSubGraph(nodes, g);
+		InducedSubGraph sg = new InducedSubGraph(nodes, g);
 
 		Path p = PathBuilder.nearestInsertionMethod(sg);
 
@@ -43,8 +43,8 @@ public class TestHillClimb {
 		for(int i = 0; i < 20000; i++){
 
 			Path p2 = PathBuilder.twoChange(
-					RandomUtil.chooseInteger(0, p.size() - 3), 
-					RandomUtil.chooseInteger(0, p.size() - 3), 
+					RandomUtil.chooseInteger(0, p.size() - 2), 
+					RandomUtil.chooseInteger(0, p.size() - 2), 
 					p,  sg);
 
 			VisitsList v2 = getVisitTimes(p2, g, simulationTime);

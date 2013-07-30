@@ -107,7 +107,7 @@ public class HillClimb {
 		
 		HillClimb ch = new HillClimb(g, 1000);
 		
-		ArrayList<Integer> agentList = new ArrayList<>();
+		ArrayList<Integer> agentList = new ArrayList<Integer>();
 		
 		agentList.add(1);
 		agentList.add(5);
