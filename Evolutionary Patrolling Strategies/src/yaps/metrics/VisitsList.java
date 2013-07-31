@@ -1,5 +1,6 @@
 package yaps.metrics;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -21,62 +22,37 @@ public class VisitsList {
 		this.lastTime = 0;
 	}
 
+	//PAS: Arrumações de estilo. Vou fazer isso só nas classes do simulador, ok? ;)
 	public VisitsList(List<Visit> visits) {
-		
-		//Diogo
-		//Check test for empty lists.
-		//========================================================//
-		this.visitList = new LinkedList<Visit>();
-		this.lastTime = 0;	
-		
-		if(visits.isEmpty()){
-			return;
-		}
-		
+		this.visitList = new ArrayList<Visit>(visits.size());
+		this.lastTime = 0;
 		for(Visit v: visits){
 			this.addVisit(v);
 		}
-		
-		//========================================================//
-		
-		//this.visitList = new ArrayList<Visit>(visits);	
-		//this.lastTime = visits.get(visits.size() - 1).time;
 	}
-	
-
-	
 	
 	public void addVisit(Visit visit) {
 		if (visit.time < this.lastTime) {
-			//Diogo
-			//Ordered insert rather than throws a error.
-			//===================================================//
-			//Ordered insert!
 			this.orderedAddVisit(visit);
-			return;
-			//====================================================//
-			//throw new IllegalArgumentException("Visit inserted in wrong order!");
 		}
 		visitList.add(visit);
 		this.lastTime = visit.time;
 	}
 	
-	public void addVisit(int time, int agent, int node) {
-		addVisit(new Visit(time, agent, node));
+	//PAS: Solução do bug. 
+	// Além disso, o agent passou para o último parâmetro porque é  
+	// a informação menos importante.
+	public void addVisit(int time, int node, int agent) {
+		addVisit(new Visit(time, node, agent));
 	}
 
-	
 	public void addVisit(int time, int node) {
-		//visitList.add(new Visit(time, -1, node));
-		
 		//Diogo
 		//Correct behavior on insert.
-		//==========================================================
+		//PAS: Ok, vc corrigiu a mesma coisa neste método, só faltava o de cima...
 		addVisit(new Visit(time, node, -1));
-		//=========================================================
 	}
-	
-	
+
 	public int getNumVisits() {
 		return visitList.size();
 	}
@@ -135,31 +111,20 @@ public class VisitsList {
 		return new VisitsList(filteredVisits);
 	}
 
-	
-	//Diogo
-	//ordered insert
-	//============================================================//    	            		
-	private void orderedAddVisit(Visit v){
-		
-		if(visitList.size() == 0){
-			this.visitList.add(v);
-			this.lastTime = v.time;
-			return;
-		}
-		
-		//this.lastTime = (this.lastTime > v.time ? this.lastTime : v.time);
-		
-		
+	//PAS: Arrumações de estilo. Removi código inatingível (a
+	//menos que seja usado um tempo negativo). Na verdade, este
+	//método nunca é chamado no projeto atual, mas vou manter...
+	private void orderedAddVisit(Visit v){	
 		int left = 0;
 		int right = this.visitList.size();
 		int midle = (left + right)/2;
 		
 		Visit u = this.visitList.get(midle);
 		
-		while(left < right - 1){
-			if(v.time > u.time){
+		while (left < right - 1) {
+			if (v.time > u.time) {
 				left = midle;
-			}else{
+			} else {
 				right = midle;
 			}
 			
@@ -167,85 +132,50 @@ public class VisitsList {
 			u = this.visitList.get(midle);
 		}
 		
-		if(v.time > u.time){
+		if (v.time > u.time) {
 			this.visitList.add(midle + 1, v);
-		}else{
+		} else {
 			this.visitList.add(midle, v);
-		}
-		
-		
+		}		
 	}
 
 	@Override
-	public String toString() {
-		
+	public String toString() {		
 		if(this.visitList.size() < 20){
 			return "VisitsList : lastTime=" + lastTime + " visitList=" + visitList;
-		}
-		
+		}		
 		return "VisitsList : lastTime=" + lastTime + " visitListSize=" + this.visitList.size();
 	}
-	//=======================================================//
-	
-	//Diogo
-	//add other list to the visit list
-	//===========================================================================//
-	public void addVisitList(List<Visit> vList) {
-		this.addVisitList(new VisitsList(vList));
-	}
-	//=============================================================================//
-	
-	//Diogo
-	//add other list to the visit list
-	//===========================================================================//
-	public void addVisitList(VisitsList other) {
 
-		this.lastTime = (this.lastTime > other.lastTime ? this.lastTime : other.lastTime);
-		
-		int i = 0, j = 0, newSize = this.visitList.size() + other.visitList.size();
+	public void addVisitList(VisitsList other) {
+		List<Visit> newList = new ArrayList<Visit>(this.visitList.size() + other.visitList.size());
 		Visit u, v;
+		int i = 0, j = 0;
 		
-		LinkedList<Visit> newList = new LinkedList<Visit>();
-		
-		while((i + j) < newSize){
-			
-			if(i == this.visitList.size()){
-				while(j < other.visitList.size()){
-					newList.add(other.visitList.get(j));
-					j++;
-				}
-				
-				
-				break;
-			}
-			
-			if(j == other.visitList.size()){
-				while(i < this.visitList.size()){
-					newList.add(this.visitList.get(i));
-					i++;
-				}
-				break;
-			}			
-			
+		while (i < this.visitList.size() && j < other.visitList.size()){
 			u = this.visitList.get(i);
 			v = other.visitList.get(j);
 			
-			if(u.time < v.time){
+			if (u.time < v.time) {
 				newList.add(u);
 				i++;
-			}else{
+			} else {
 				newList.add(v);
 				j++;
-			}
-			
-			
+			}			
 		}
 		
-		this.visitList = newList;
-		
-		
-		
+		while (j < other.visitList.size()){
+			newList.add(other.visitList.get(j));
+			j++;
+		}		
+		while (i < this.visitList.size()){
+			newList.add(this.visitList.get(i));
+			i++;
+		}
+
+		this.lastTime = (this.lastTime > other.lastTime ? this.lastTime : other.lastTime);
+		this.visitList = newList;		
 	}
-	//=============================================================================//
 	
 }

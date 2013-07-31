@@ -11,6 +11,7 @@ import yaps.graph_library.Path;
 import yaps.graph_library.PathBuilder;
 import yaps.util.RandomUtil;
 
+//PAS: Nunca usada?
 public class AgentMATP {
 
 	private Path path;

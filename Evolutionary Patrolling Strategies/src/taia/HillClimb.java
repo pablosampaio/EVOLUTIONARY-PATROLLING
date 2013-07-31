@@ -72,16 +72,19 @@ public class HillClimb {
 		IntervalMetricsReport intervalReport = new IntervalMetricsReport(numOFNodes, 1, simulationTime, vs);
 		IntervalMetricsReport rIntervalReport;
 		
-		bestMetric = intervalReport.getAverageInterval();
+		// PAS: As metricas boas individualmente sao: maximum interval / quadratic mean of intervals.
+		// Ajustar tambem em HillClimbWithRandomRestarts 
+		bestMetric = intervalReport.getMaxInterval();
 		
 		System.out.println("Initial metric value:  " + bestMetric);
+		//System.out.println(intervalReport);
 		
 		while(numberIterations-- > 0){
 			//System.out.println("Before Tweak:"+s);
 			r = s.tweakCopy();
 			//System.out.println("After Tweak:"+r);
 			rIntervalReport = new IntervalMetricsReport(numOFNodes, 1, simulationTime, r.generateVisitList(simulationTime));
-			metric = rIntervalReport.getAverageInterval();
+			metric = rIntervalReport.getMaxInterval();
 			
 			if(metric < bestMetric){
 				bestMetric = metric;
@@ -100,10 +103,9 @@ public class HillClimb {
 	
 	public static void main(String[] args) throws IOException {
 		
-		
-		Graph g = GraphReader.readAdjacencyList("./maps/island11");
-		
-		g.changeRepresentation(GraphDataRepr.LISTS);
+		//PAS: simplifiquei a chamada. mas não entendi pq vcs só querem listas. 
+		//o default é o mais otimizado, pois mantem listas AND matriz!
+		Graph g = GraphReader.readAdjacencyList("./maps/island11", GraphDataRepr.LISTS);
 		
 		HillClimb ch = new HillClimb(g, 1000);
 		

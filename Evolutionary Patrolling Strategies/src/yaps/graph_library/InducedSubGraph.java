@@ -30,11 +30,7 @@ public class InducedSubGraph extends Graph {
 
 		for (Integer i : nodes) {
 			for (Integer j : nodes) {
-				if (i == j) {
-					continue;
-				}
-
-				if (graph.existsEdge(i, j)) {
+				if (i != j && graph.existsEdge(i, j)) {
 					this.addEdge(graph.getEdge(i, j));
 				}
 			}
@@ -45,10 +41,6 @@ public class InducedSubGraph extends Graph {
 
 		for (Integer i : nodes) {
 			for (Integer j : nodes) {
-				if (i == j) {
-					continue;
-				}
-
 				if (!this.allPaths.existsPath(i, j)) {
 					this.isConnected = false;
 					return;

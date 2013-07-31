@@ -55,7 +55,7 @@ public class ListView<E> extends AbstractList<E> {
 	public E get(int index) {
 		if (index >= this.viewSize) {
 			throw new IndexOutOfBoundsException("index:" + index + " size:" + this.viewSize);
-		}		
+		}
 		int adjustedIndex = this.revert? (this.start - index) : (this.start + index); 
 		return this.originalList.get(adjustedIndex);
 	}
@@ -66,15 +66,22 @@ public class ListView<E> extends AbstractList<E> {
 	}
 	
 	public List<E> createConcatenation(List<E> list) {
-		ArrayList<E> concatenation = new ArrayList<E>(this.size() + list.size());
+		ArrayList<E> concatenation = new ArrayList<>(this.size() + list.size());
 		concatenation.addAll(this);
 		concatenation.addAll(list);
 		return concatenation;
 	}
 
+	public ListView<E> reverse() {
+		if (this.revert) { 
+			return new ListView<E>(this.originalList, this.start-this.viewSize+1, this.start);
+		} else {
+			return new ListView<E>(this.originalList, this.start+this.viewSize-1, this.start);
+		}
+	}
 	
 	public static void main(String[] args) {
-		LinkedList<Integer> theList = new LinkedList<Integer>();
+		LinkedList<Integer> theList = new LinkedList<>();
 		
 		theList.add(1); theList.add(3);
 		theList.add(5); theList.add(7);
@@ -83,9 +90,9 @@ public class ListView<E> extends AbstractList<E> {
 
 		System.out.println("LISTA ORIGINAL: " + theList + ", tamanho " + theList.size());
 		
-		ListView<Integer> view1 = new ListView<Integer>(theList, 0, 2);  //indices 0 a 2
-		ListView<Integer> view2 = new ListView<Integer>(theList, 4, 4);  //indice 4 apenas
-		ListView<Integer> view3 = new ListView<Integer>(theList, 4);     //do indice 4 em diante
+		ListView<Integer> view1 = new ListView<>(theList, 0, 2);  //indices 0 a 2
+		ListView<Integer> view2 = new ListView<>(theList, 4, 4);  //indice 4 apenas
+		ListView<Integer> view3 = new ListView<>(theList, 4);     //do indice 4 em diante
 		
 		System.out.println("VIEW_1: " + view1 + ", tamanho " + view1.size());
 		System.out.println("VIEW_2: " + view2 + ", tamanho " + view2.size());
@@ -96,9 +103,9 @@ public class ListView<E> extends AbstractList<E> {
 		System.out.println("VIEW_2 + VIEW_1: " + view2.createConcatenation(view1));
 		System.out.println();
 		
-		ListView<Integer> view4 = new ListView<Integer>(theList, 4, true);  //do indice 4 para tras
-		ListView<Integer> view5 = new ListView<Integer>(theList, 4, 0);     //do indice 4 para tras
-		ListView<Integer> view6 = new ListView<Integer>(theList, 6, 4);     //indices 6, 5 e 4 (nesta ordem)
+		ListView<Integer> view4 = new ListView<>(theList, 4, true);  //do indice 4 para tras
+		ListView<Integer> view5 = new ListView<>(theList, 4, 0);     //do indice 4 para tras
+		ListView<Integer> view6 = new ListView<>(theList, 6, 4);     //indices 6, 5 e 4 (nesta ordem)
 		
 		System.out.println("VIEW_4: " + view4 + ", tamanho " + view4.size());
 		System.out.println("VIEW_5: " + view5 + ", tamanho " + view5.size());
@@ -106,6 +113,10 @@ public class ListView<E> extends AbstractList<E> {
 		System.out.println();
 		
 		System.out.println("VIEW_3 + VIEW_6: " + view3.createConcatenation(view6));
+		System.out.println();
+
+		System.out.println("VIEW_1 reversed: " + view1.reverse() + ", tamanho " + view1.reverse().size());
+		System.out.println("VIEW_4 reversed: " + view4.reverse() + ", tamanho " + view4.reverse().size());
 	}
 
 }

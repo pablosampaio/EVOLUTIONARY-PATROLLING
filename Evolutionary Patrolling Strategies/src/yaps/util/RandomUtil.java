@@ -43,7 +43,6 @@ public class RandomUtil {
 	
 	/**
 	 * Escolhe um double entre zero e 1(exclusivo).
-	 * 
 	 */
 	public static double getUniformDouble(){
 		return rand.nextDouble();
@@ -53,17 +52,27 @@ public class RandomUtil {
 	 * Escolhe um boolean entre zero e 1(exclusivo).
 	 * 
 	 */
+	//PAS: Que nome eh esse?
+	// Acho que ele poderia ter uma versão com um parâmetro p da probabilidade
+	// de dar true. Vao precisar em alguns algoritmos
 	public static boolean getHeadTailTrow(){
 		return rand.nextBoolean();
 	}
 	
-	
+	//PAS: Um algoritmo especializado (que eu já tinha 
+	//implementado aqui, mas no tinha enviado). 
+	// Fisher-Yattes algorithm
 	public static <T> List<T> shuffle(List<T> l){
-		List<T> ls = new ArrayList<T>();
-		ls.addAll(l);
-		Collections.shuffle(ls, rand);
-		return ls;
+		List<T> list = new ArrayList<T>(l);
+		int j;
+		T temp;
+		for (int i = list.size()-1; i >= 1; i --) {
+			j = rand.nextInt(i+1); //[0, i]
+			temp = list.get(i);
+			list.set(i, list.get(j));
+			list.set(j, temp);
+		}
+		return list;
 	}
-
 
 }

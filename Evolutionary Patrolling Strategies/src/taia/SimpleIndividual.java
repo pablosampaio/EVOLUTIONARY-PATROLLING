@@ -51,6 +51,8 @@ public class SimpleIndividual {
 		
 		int numAddedNodes = 0;
 		
+		//PAS: (Secundario) Representando as partições com um array? Pode ser inviável para
+		//algoritmos de população em grafos muito grandes...
 		HashMap<Integer, boolean[]> marksList = new HashMap<Integer, boolean[]>();
 		boolean[] nodeMarks = new boolean[graph.getNumNodes()];
 		
@@ -63,7 +65,9 @@ public class SimpleIndividual {
 			numAddedNodes++;
 		}
 		
-		
+		//PAS: (Secundario) Esta eh uma maneira perfeitamente valida de inicializar aleatoriamente, 
+		// mas tambem pensei em outra: fazer uma particao exclusiva e so incluir os nos necessarios 
+		// para tornar cada subgrafo conectado. Qual a melhor? Nao sei. So testando... 
 		while(numAddedNodes < graph.getNumNodes()){
 			
 			Integer node = ListUtil.chooseAtRandom(agentList);
@@ -94,7 +98,9 @@ public class SimpleIndividual {
 				}
 			}
 			
-			
+			//PAS: Tem varias formas de inicializar o ciclo. Esta é uma delas (ok).
+			// Veja que inicializar envolve: 1) de particionar, 2) formar os ciclos.
+			// Seria bom ter varias formas de fazer cada um e parametrizar a escolha delas. 
 			agents.put(n, PathBuilder.nearestInsertionMethod(new InducedSubGraph(nodes, graph)));
 			
 		}
@@ -125,7 +131,7 @@ public class SimpleIndividual {
 		return v;
 	}
 	
-	
+	//PAS: Nunca usado!
 	public void addRandomNode(Integer agent){
 		ArrayList<Integer> nodes = new ArrayList<Integer>();
 		
@@ -206,6 +212,9 @@ public class SimpleIndividual {
 		
 		Integer agentFixedNode = ListUtil.chooseAtRandom(agentList);
 		
+		//PAS: (Secundario) Pode atribuir uma probabilidade para cada mudanca.
+		// Se houver mais de 2 opcoes, pode inicializar um array das probabilidades e
+		// chamar RandomUtil.chooseProportionally().
 		if(RandomUtil.getHeadTailTrow()){
 			
 			
@@ -220,10 +229,13 @@ public class SimpleIndividual {
 	
 			}
 
+			//PAS: Nao deveria escolher um no FORA do caminho?
 			Integer node = ListUtil.chooseAtRandom(graph.getNodesList());
 			
 			AllPairsShortestPaths allp = graph.getAllPaths();
 			
+			//PAS: Nao entendi bem a ideia. Escolhe um no que ja esta no caminho e 
+			// adiciona todos que estao ao longo deste caminho ao no fixo do agente?
 			Path path = allp.getPath(agentFixedNode, node);
 			
 			for(Integer n: path){

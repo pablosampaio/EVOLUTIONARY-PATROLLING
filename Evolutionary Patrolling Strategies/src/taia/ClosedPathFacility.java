@@ -4,6 +4,8 @@ import yaps.graph_library.Graph;
 import yaps.graph_library.Path;
 import yaps.metrics.VisitsList;
 
+//PAS: (Secundario:) Uma classe só para uma função? Repensar...
+//Veja o que fiz com a classe PathFunctions - coloquei tudo em Path e apaguei a classe.
 public class ClosedPathFacility {
 
 	
@@ -19,7 +21,7 @@ public class ClosedPathFacility {
 			int cNode = p.get( (i) % (p.size()-1)  );
 			lastTime += g.getLength(lNode, cNode);
 			
-			v.addVisit(lastTime, agent, cNode);
+			v.addVisit(lastTime, cNode, agent);
 			//v.addVisit(lastTime, cNode);
 		}
 
@@ -29,13 +31,6 @@ public class ClosedPathFacility {
 	public static VisitsList fromClosedPathToVisitList(Path p, Graph g, int time){
 		return fromClosedPathToVisitList(p, g, time, -1);
 	}
-	
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 
-	}
 
 }

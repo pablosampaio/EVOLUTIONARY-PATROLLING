@@ -8,6 +8,11 @@ import yaps.graph_library.Graph;
 import yaps.graph_library.GraphDataRepr;
 import yaps.graph_library.algorithms.AllPairsShortestPaths;
 
+//PAS: 
+// 1 - (Secundario) Precisava mesmo estender Graph? Esta filha nao se comporta 
+//     coerente com a classe pai.  
+// 2 - Falta comentar (mesmo que de forma muito curta) o objetivo das classes...
+// 3 - Veja se AllPairsShortestPaths.toCompleteDistancesGraph() nao faz o que vcs querem...
 public class PreCalculedPathGraph extends Graph{
 
 	private AllPairsShortestPaths allPaths;
