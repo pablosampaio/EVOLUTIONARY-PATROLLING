@@ -215,7 +215,7 @@ public class SimpleIndividual {
 		//PAS: (Secundario) Pode atribuir uma probabilidade para cada mudanca.
 		// Se houver mais de 2 opcoes, pode inicializar um array das probabilidades e
 		// chamar RandomUtil.chooseProportionally().
-		if(RandomUtil.getHeadTailTrow()){
+		if(RandomUtil.chooseBoolean()){
 			
 			
 			ArrayList<Integer> nodes = new ArrayList<Integer>();
