@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import yaps.graph_library.Graph;
 import yaps.graph_library.GraphDataRepr;
 import yaps.graph_library.GraphReader;
-import yaps.metrics.IntervalMetricsReport;
+import yaps.metrics.Metric;
 import yaps.metrics.VisitsList;
 import yaps.util.RandomUtil;
 
@@ -59,7 +59,7 @@ public class HillClimbWithRandomRestarts extends HillClimb {
 		
 	}*/
 	
-	public SimpleIndividual climbHillWithRandomRestarts(int numberOfAgents, int numberOfIterations, int[] distributionOfTimeIntervals) {
+	public SimpleIndividual climbHillWithRandomRestarts(int numberOfAgents, int numberOfIterations, int[] distributionOfTimeIntervals, Metric metrica) {
 		
 		//S <- Some initial random candidate solution
 		
@@ -87,9 +87,8 @@ public class HillClimbWithRandomRestarts extends HillClimb {
 		
 		double qualityOfBest;
 		
-		IntervalMetricsReport intervalReport = new IntervalMetricsReport(getNumOFNodes(), 1, getSimulationTime(), vs);
 		
-		qualityOfBest = intervalReport.getAverageInterval();
+		qualityOfBest = metrica.calculate(vs, getNumOFNodes(), 1, getSimulationTime());
 		
 		System.out.println("RandomRestarts: Initial configuration:  \n" + best+"\n");
 		
@@ -101,7 +100,7 @@ public class HillClimbWithRandomRestarts extends HillClimb {
 			
 			System.out.println("==========================================================\nHill Climb");
 			
-			s = this.doHillClimb(s, time);
+			s = this.doHillClimb(s, time, metrica);
 			
 			double qualityOfS = this.getBestMetric(); //Attention!!! "Best Metric" from the hill climb!!
 			//Do not misunderstand!
@@ -160,7 +159,7 @@ public class HillClimbWithRandomRestarts extends HillClimb {
 			distribution[i] = 1000;
 		}
 		
-		SimpleIndividual finalSolution = randomRestarts.climbHillWithRandomRestarts(3, 10, distribution);
+		SimpleIndividual finalSolution = randomRestarts.climbHillWithRandomRestarts(3, 10, distribution, Metric.MAXIMUM_INTERVAL);
 		
 		System.out.println("Random Restarts: Final configuration:\n"+finalSolution+"\n================================\n");
 

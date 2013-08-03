@@ -1,11 +1,13 @@
 package taia;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 
 import taia.util.ListUtil;
+import yaps.graph_library.GraphReader;
 import yaps.graph_library.InducedSubGraph;
 import yaps.graph_library.Path;
 import yaps.graph_library.PathBuilder;
@@ -58,13 +60,138 @@ public class AgentMATP {
 	}
 
 
-	public void addRandomNodeAndRebuildPath(){
 
-		if(this.coveredNodesSet.size() == this.inducedSubGraph.getFatherGraph().getNumNodes()){
+	public void removeRandomNodeWithSmallChanges(){
+
+		if(this.path.size() <= 3){
 			return;
 		}
 
-		List<Integer> suffledList = RandomUtil.shuffle(this.inducedSubGraph.getFatherGraph().getNodesList());
+		//1 - 2 - 3 - 2 -  1
+
+		int nodeIndex;
+		List<Integer> indexList = ListUtil.createIndexList(0, this.path.size() - 1, 1);
+
+		do{
+			nodeIndex = ListUtil.chooseAtRandom( indexList );	
+		}while(path.get(nodeIndex).equals(centerNode));
+
+		if(nodeIndex == 0 || nodeIndex == (this.path.size() - 1)){
+			//1x - 2 - 3 - 4 - x1x
+			  
+			this.path.removeFirst();
+			this.path.removeLast();
+
+			Path p = this.inducedSubGraph.getAllPaths().getPath(this.path.peekLast(), this.path.peekFirst());
+
+			p.removeFirst();
+
+			for(Integer np: p){
+				//do field medal
+				this.path.addLast(np);
+			}
+
+			this.coveredNodesSet = new HashSet<Integer>(this.path);
+
+			return;
+		}
+
+
+		Path p = this.inducedSubGraph.getAllPaths().getPath( this.path.get(nodeIndex - 1), this.path.get(nodeIndex + 1));
+		p.removeFirst();
+		p.removeLast();
+
+		//x1x - 2 - 3 - 4 -  X1X 
+		this.path.remove(nodeIndex);
+
+		for(Integer np: p){
+			//do field medal
+			this.path.add(nodeIndex, np);
+		}		
+
+		this.coveredNodesSet = new HashSet<Integer>(this.path);
+
+
+	}
+
+
+	public void addRandomNodeWithSmallChanges(){
+
+		PreCalculedPathGraph fatherG = this.inducedSubGraph.getFatherGraph();
+
+		if(this.coveredNodesSet.size() == fatherG.getNumNodes()){
+			return;
+		}
+
+
+		Integer node = null;
+		List<Integer> shuffeledNodeList = RandomUtil.shuffle(fatherG.getNodesList());
+
+		for(Integer n: shuffeledNodeList){
+			if(!this.coveredNodesSet.contains(n)){
+				node = n;
+				this.coveredNodesSet.add(n);
+				break;
+			}
+		}
+
+		if(node == null){
+			return;
+		}
+
+
+		int i  = 0;
+		double d = fatherG.getAllPaths().getDistance(this.path.getFirst(), node);
+		double dTry = d;
+
+		for(int k = 0; k < this.path.size(); k++){
+			
+			Integer nTry = this.path.get(k);
+			
+			dTry = fatherG.getAllPaths().getDistance(nTry, node);
+
+			if(dTry < d){
+				d = dTry;
+				i = k;
+			}
+
+		}
+
+
+		Path p = fatherG.getAllPaths().getPath(this.path.remove(i), node);
+		this.coveredNodesSet.addAll(p);
+		// 1 - 3 - 2 - 1
+		// add 5 ao 2 path: 2 - 6 - 7 - 5
+		// 1 - 3  - 2 - 2 - 1
+		// 1 - 3  - 2 - 6 - 6 - 2 - 1
+		// 1 - 3  - 2 - 6 - 7 - 7 - 6 - 2 - 1
+		// 1 - 3  - 2 - 6 - 7 - 5 - 7 - 6 - 2 - 1
+		
+		for(int k = 0; k < p.size(); k++){
+		
+			if(k == p.size() - 1){
+				this.path.add(i + k, p.get(k));
+				break;
+			}
+			
+			this.path.add(i + k, p.get(k));
+			this.path.add(i + k + 1, p.get(k));
+			
+		}
+		
+
+	}
+
+
+	public void addRandomNodeAndRebuildPath(){
+
+
+		PreCalculedPathGraph fatherG = this.inducedSubGraph.getFatherGraph();
+		if(this.coveredNodesSet.size() == fatherG.getNumNodes()){
+			return;
+		}
+
+		List<Integer> suffledList = RandomUtil.shuffle(fatherG.getNodesList());
 
 		Integer node = null;
 
@@ -81,21 +208,16 @@ public class AgentMATP {
 		}
 
 
-		Path path = inducedSubGraph.getAllPaths().getPath(this.centerNode, node);
-
-		for(Integer n: path){
-
-			if(!this.coveredNodesSet.contains(n)){
-				node = n;
-				this.coveredNodesSet.add(n);	
-			}
-		}
+		this.coveredNodesSet.addAll( fatherG.getAllPaths().getPath(this.centerNode, node) ); 
 
 		this.inducedSubGraph = new InducedSubGraph(new ArrayList<Integer>(this.coveredNodesSet) , this.inducedSubGraph.getFatherGraph());
 
 		this.builNewPath();
 
+
+
 	}
+
 
 
 	public void removeRandomNodeAndRebuildPath(){
@@ -155,6 +277,27 @@ public class AgentMATP {
 	}
 
 
+	public void twoChangeImprove(int nTimes){
+		while(nTimes-- > 0){
+			this.twoChangeImprove();
+		}
+	}
+
+
+	public void twoChangeImprove(){
+
+		Path oldPath = this.path;
+
+		applyRandomTwoChange();
+
+		if(oldPath.getCost(inducedSubGraph) < this.path.getCost(inducedSubGraph)){
+			this.path = oldPath;
+		}
+
+
+	}
+
+
 	public void applyRandomTwoChange(){
 
 		//At least four nodes!
@@ -206,15 +349,16 @@ public class AgentMATP {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Object clone() throws CloneNotSupportedException {
+	public Object clone() {
 		AgentMATP other = new AgentMATP();
 
 		other.buildMethod = this.buildMethod;
 		other.centerNode = this.centerNode;
 		other.coveredNodesSet = (HashSet<Integer>)this.coveredNodesSet.clone();
 		other.inducedSubGraph = (InducedSubGraph)this.inducedSubGraph.clone();
-
-		return super.clone();
+		other.path	= (Path)this.path.clone();
+		
+		return other;
 	}
 
 
@@ -246,13 +390,13 @@ public class AgentMATP {
 			if(!this.coveredNodesSet.equals(other.coveredNodesSet)){
 				return false;
 			}
-			
+
 			if(!this.inducedSubGraph.equals(other.inducedSubGraph)){
 				return false;
 			}
-			
+
 			return true;
-			
+
 		}
 		return false;
 	}
@@ -270,9 +414,38 @@ public class AgentMATP {
 
 		return sb.toString();
 	}
-
-
-
-
+	
+	
+	public static void main(String[] args) throws IOException {
+		
+		PreCalculedPathGraph g = new PreCalculedPathGraph(GraphReader.readAdjacencyList("./maps/island11"));
+		
+		List<Integer> nodes = new ArrayList<Integer>();
+		
+		nodes.add(0);nodes.add(1);nodes.add(2);nodes.add(3);		
+		
+		AgentMATP agent = new AgentMATP(1, new InducedSubGraph(nodes, g));
+		
+		System.out.println(g);
+		
+		System.out.println(agent);
+		
+		agent.addRandomNodeAndRebuildPath();
+		
+		System.out.println(agent);
+		
+		agent.removeRandomNodeAndRebuildPath();
+		
+		System.out.println(agent);
+		
+		agent.addRandomNodeWithSmallChanges();
+		
+		System.out.println(agent);
+		
+		agent.removeRandomNodeWithSmallChanges();
+		
+		System.out.println(agent);
+		
+	}
 
 }

@@ -3,6 +3,8 @@ package tests;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import taia.PreCalculedPathGraph;
+
 import yaps.graph_library.Graph;
 import yaps.graph_library.GraphDataRepr;
 import yaps.graph_library.GraphReader;
@@ -22,7 +24,7 @@ public class TestHillClimb {
 
 	public static void main(String[] args) throws IOException {
 
-		Graph g = GraphReader.readAdjacencyList("./maps/island11");
+		PreCalculedPathGraph g = new PreCalculedPathGraph(GraphReader.readAdjacencyList("./maps/island11"));
 
 		ArrayList<Integer> nodes = new ArrayList<Integer>();
 

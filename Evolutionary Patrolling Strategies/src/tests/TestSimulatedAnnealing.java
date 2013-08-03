@@ -3,6 +3,8 @@ package tests;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import taia.PreCalculedPathGraph;
+
 import yaps.graph_library.Graph;
 import yaps.graph_library.GraphReader;
 import yaps.graph_library.InducedSubGraph;
@@ -25,7 +27,7 @@ public class TestSimulatedAnnealing extends TestHillClimb {
 	 */
 	public static void main(String[] args) throws IOException {
 		
-		Graph g = GraphReader.readAdjacencyList("./maps/island11");
+		PreCalculedPathGraph g = new PreCalculedPathGraph(GraphReader.readAdjacencyList("./maps/island11"));
 		
 		ArrayList<Integer> nodes = new ArrayList<Integer>();
 

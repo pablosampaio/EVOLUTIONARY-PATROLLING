@@ -330,54 +330,6 @@ public class PathBuilder {
 				
 			}
 
-		
-/*
-			if(k == edge1 + 1){
-
-				Path p1 = allPath.getPath(p.get(k - 1), p.get(edge2 + 1));
-				Path p2 = allPath.getPath(p.get(edge2 + 1), p.get(k + 1));
-
-				p1.removeFirst();
-				p2.removeFirst();
-				//p2.removeLast();
-
-				while(!p1.isEmpty()){
-					nPath.addLast(p1.removeFirst());
-				}
-
-				while(!p2.isEmpty()){
-					nPath.addLast(p2.removeFirst());
-				}
-
-				k++;
-				continue;
-			}
-
-			if(k == edge2 + 1){
-
-				Path p1 = allPath.getPath(p.get(k - 1), p.get(edge1 + 1));
-				Path p2 = allPath.getPath(p.get(edge1 + 1), p.get(k + 1));
-
-				p1.removeFirst();
-				p2.removeFirst();
-				//p2.removeLast();
-
-				while(!p1.isEmpty()){
-					nPath.addLast(p1.removeFirst());
-				}
-
-				while(!p2.isEmpty()){
-					nPath.addLast(p2.removeFirst());
-				}
-
-				k++;
-				continue;
-			}
-
-
-			nPath.add(p.get(k));
-
-		*/
 		}
 
 

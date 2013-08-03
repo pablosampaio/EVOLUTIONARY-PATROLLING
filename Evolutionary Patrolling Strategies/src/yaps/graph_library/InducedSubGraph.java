@@ -3,6 +3,8 @@ package yaps.graph_library;
 import java.util.ArrayList;
 import java.util.List;
 
+import taia.PreCalculedPathGraph;
+
 import yaps.graph_library.algorithms.AllPairsShortestPaths;
 
 public class InducedSubGraph extends Graph {
@@ -15,13 +17,13 @@ public class InducedSubGraph extends Graph {
 	private List<Integer> nodes;
 	private boolean isConnected = false;
 	private AllPairsShortestPaths allPaths;
-	private Graph graph;
+	private PreCalculedPathGraph graph;
 
 	private InducedSubGraph() {
 		super(0, null);
 	}
 
-	public InducedSubGraph(List<Integer> nodes, Graph graph) {
+	public InducedSubGraph(List<Integer> nodes, PreCalculedPathGraph graph) {
 
 		super(graph.getNumNodes(), graph.getRepresentation());
 		this.graph = graph;
@@ -65,12 +67,12 @@ public class InducedSubGraph extends Graph {
 		return allPaths;
 	}
 
-	public Graph getFatherGraph() {
+	public PreCalculedPathGraph getFatherGraph() {
 		return graph;
 	}
 
 	@Override
-	public Object clone() throws CloneNotSupportedException {
+	public Object clone(){
 		InducedSubGraph other = new InducedSubGraph();
 		other.graph = this.graph;
 		other.isConnected = this.isConnected;

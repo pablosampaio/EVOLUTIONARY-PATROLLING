@@ -3,6 +3,8 @@ package tests;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import taia.PreCalculedPathGraph;
+
 import yaps.graph_library.Graph;
 import yaps.graph_library.GraphReader;
 import yaps.graph_library.InducedSubGraph;
@@ -19,7 +21,7 @@ public class TestGraphLibrary {
 	}
 
 	private static void testReadingAndShortestPaths() throws IOException {
-		Graph graph = GraphReader.readAdjacencyList("./maps/island11");
+		PreCalculedPathGraph graph = new PreCalculedPathGraph(GraphReader.readAdjacencyList("./maps/island11"));
 		
 		//imprime o grafo na forma de matriz e de listas de adjacencias
 		System.out.println(graph);

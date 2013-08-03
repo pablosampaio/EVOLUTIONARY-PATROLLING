@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import yaps.graph_library.Graph;
 import yaps.graph_library.GraphDataRepr;
 import yaps.graph_library.GraphReader;
-import yaps.metrics.IntervalMetricsReport;
+import yaps.metrics.Metric;
 import yaps.metrics.VisitsList;
 
 public class HillClimb {
@@ -61,20 +61,19 @@ public class HillClimb {
 	}
 
 
-	public SimpleIndividual doHillClimb(SimpleIndividual s, int numberIterations){
+	public SimpleIndividual doHillClimb(SimpleIndividual s, int numberIterations, Metric metrica){
 		
 		SimpleIndividual r = null;
 		
 		VisitsList vs = s.generateVisitList(simulationTime);
 		
 		double bestMetric, metric;
+		Metric metricCaltulator = metrica;
 		
-		IntervalMetricsReport intervalReport = new IntervalMetricsReport(numOFNodes, 1, simulationTime, vs);
-		IntervalMetricsReport rIntervalReport;
 		
 		// PAS: As metricas boas individualmente sao: maximum interval / quadratic mean of intervals.
 		// Ajustar tambem em HillClimbWithRandomRestarts 
-		bestMetric = intervalReport.getMaxInterval();
+		bestMetric = metricCaltulator.calculate(vs, numOFNodes, 1, simulationTime);
 		
 		System.out.println("Initial metric value:  " + bestMetric);
 		//System.out.println(intervalReport);
@@ -83,8 +82,8 @@ public class HillClimb {
 			//System.out.println("Before Tweak:"+s);
 			r = s.tweakCopy();
 			//System.out.println("After Tweak:"+r);
-			rIntervalReport = new IntervalMetricsReport(numOFNodes, 1, simulationTime, r.generateVisitList(simulationTime));
-			metric = rIntervalReport.getMaxInterval();
+			
+			metric = metricCaltulator.calculate( r.generateVisitList(simulationTime), numOFNodes, 1, simulationTime);
 			
 			if(metric < bestMetric){
 				bestMetric = metric;
@@ -122,7 +121,7 @@ public class HillClimb {
 		System.out.println(s);
 		System.out.println("================================\n");
 		
-		s = ch.doHillClimb(s, 1000);
+		s = ch.doHillClimb(s, 1000, Metric.MAXIMUM_INTERVAL);
 		
 		System.out.println("\n================================");
 		System.out.println("Final configuration:");
