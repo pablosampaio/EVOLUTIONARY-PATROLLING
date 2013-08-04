@@ -156,10 +156,10 @@ public class HillClimbWithRandomRestarts extends HillClimb {
 		int[] distribution = new int[10];
 		
 		for(int i = 0; i < 10; i++) {
-			distribution[i] = 1000;
+			distribution[i] = 5000;
 		}
 		
-		SimpleIndividual finalSolution = randomRestarts.climbHillWithRandomRestarts(3, 10, distribution, Metric.MAXIMUM_INTERVAL);
+		SimpleIndividual finalSolution = randomRestarts.climbHillWithRandomRestarts(3, 15, distribution, Metric.MAXIMUM_INTERVAL);
 		
 		System.out.println("Random Restarts: Final configuration:\n"+finalSolution+"\n================================\n");
 
