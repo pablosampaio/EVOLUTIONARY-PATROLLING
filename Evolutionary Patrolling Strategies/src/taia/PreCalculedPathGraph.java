@@ -8,7 +8,7 @@ import yaps.graph_library.Graph;
 import yaps.graph_library.GraphDataRepr;
 import yaps.graph_library.algorithms.AllPairsShortestPaths;
 
-//PAS: 
+//PAS: (secundario)
 // 1 - (Secundario) Precisava mesmo estender Graph? Esta filha nao se comporta 
 //     coerente com a classe pai.  
 // 2 - Falta comentar (mesmo que de forma muito curta) o objetivo das classes...

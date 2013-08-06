@@ -5,7 +5,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import taia.util.ListUtil;
-
 import yaps.graph_library.Path;
 import yaps.graph_library.algorithms.AllPairsShortestPaths;
 import yaps.util.RandomUtil;

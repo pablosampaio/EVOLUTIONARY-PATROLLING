@@ -1,7 +1,7 @@
 package taia;
 
-import yaps.graph_library.Graph;
 import yaps.graph_library.Path;
+import yaps.graph_library.algorithms.AllPairsShortestPaths;
 import yaps.metrics.VisitsList;
 
 //PAS: (Secundario:) Uma classe só para uma função? Repensar...
@@ -9,7 +9,7 @@ import yaps.metrics.VisitsList;
 public class ClosedPathFacility {
 
 	
-	public static VisitsList fromClosedPathToVisitList(Path p, Graph g, int time, int agent){
+	public static VisitsList fromClosedPathToVisitList(Path p, AllPairsShortestPaths allPaths, int time, int agent){
 
 		VisitsList v = new VisitsList();
 
@@ -19,7 +19,7 @@ public class ClosedPathFacility {
 		for(int i = 1; i < time; i++){
 			int lNode = p.get( (i -1) % (p.size()-1) );
 			int cNode = p.get( (i) % (p.size()-1)  );
-			lastTime += g.getLength(lNode, cNode);
+			lastTime += allPaths.getDistance(lNode, cNode);
 			
 			v.addVisit(lastTime, cNode, agent);
 			//v.addVisit(lastTime, cNode);
@@ -28,8 +28,8 @@ public class ClosedPathFacility {
 		return v;
 	}
 	
-	public static VisitsList fromClosedPathToVisitList(Path p, Graph g, int time){
-		return fromClosedPathToVisitList(p, g, time, -1);
+	public static VisitsList fromClosedPathToVisitList(Path p, AllPairsShortestPaths allPaths, int time){
+		return fromClosedPathToVisitList(p, allPaths, time, -1);
 	}
 
 

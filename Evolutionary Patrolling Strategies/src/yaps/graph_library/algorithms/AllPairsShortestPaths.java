@@ -1,8 +1,8 @@
 package yaps.graph_library.algorithms;
 
 import yaps.graph_library.Graph;
-import yaps.graph_library.Path;
 import yaps.graph_library.GraphDataRepr;
+import yaps.graph_library.Path;
 
 
 public class AllPairsShortestPaths {

@@ -22,7 +22,6 @@ public class VisitsList {
 		this.lastTime = 0;
 	}
 
-	//PAS: Arrumações de estilo. Vou fazer isso só nas classes do simulador, ok? ;)
 	public VisitsList(List<Visit> visits) {
 		this.visitList = new ArrayList<Visit>(visits.size());
 		this.lastTime = 0;
@@ -39,17 +38,12 @@ public class VisitsList {
 		this.lastTime = visit.time;
 	}
 	
-	//PAS: Solução do bug. 
-	// Além disso, o agent passou para o último parâmetro porque é  
-	// a informação menos importante.
+
 	public void addVisit(int time, int node, int agent) {
 		addVisit(new Visit(time, node, agent));
 	}
 
 	public void addVisit(int time, int node) {
-		//Diogo
-		//Correct behavior on insert.
-		//PAS: Ok, vc corrigiu a mesma coisa neste método, só faltava o de cima...
 		addVisit(new Visit(time, node, -1));
 	}
 
@@ -111,9 +105,7 @@ public class VisitsList {
 		return new VisitsList(filteredVisits);
 	}
 
-	//PAS: Arrumações de estilo. Removi código inatingível (a
-	//menos que seja usado um tempo negativo). Na verdade, este
-	//método nunca é chamado no projeto atual, mas vou manter...
+
 	private void orderedAddVisit(Visit v){	
 		int left = 0;
 		int right = this.visitList.size();

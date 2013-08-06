@@ -1,35 +1,33 @@
-package taia;
+package taia.individual;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import taia.AgentMATP;
+import taia.GraphEquipartition;
+import taia.PreCalculedPathGraph;
 import taia.util.ListUtil;
 import yaps.graph_library.GraphReader;
 import yaps.graph_library.InducedSubGraph;
 import yaps.graph_library.Path;
 import yaps.graph_library.algorithms.AllPairsShortestPaths;
-import yaps.metrics.VisitsList;
 import yaps.util.RandomUtil;
 
-public class SimpleIndividual {
+public class SimpleIndividual extends GenericMATPIndividual{
 
 	
-	private HashMap<Integer, AgentMATP> agents;
-	private PreCalculedPathGraph graph;
-	private List<Integer> agentList;
+
 	
 	
 	
 	public SimpleIndividual(List<Integer> fixedNodeList, PreCalculedPathGraph graph){
 			
-		agents = new HashMap<Integer, AgentMATP>();
 		agentList = fixedNodeList;
 		this.graph = graph;
 		
-		
-		randomNewIndividual();
+		rebuilIndiviual();
 		
 	}
 	
@@ -49,10 +47,12 @@ public class SimpleIndividual {
 	}
 	
 	
-	private void randomNewIndividual(){
+	public void rebuilIndiviual(){
+		
+		agents = new HashMap<Integer, AgentMATP>();
 		
 		int numAddedNodes = 0;
-		
+
 		//PAS: (Secundario) Representando as partições com um array? Pode ser inviável para
 		//algoritmos de população em grafos muito grandes...
 		HashMap<Integer, boolean[]> marksList = new HashMap<Integer, boolean[]>();
@@ -70,9 +70,14 @@ public class SimpleIndividual {
 		//PAS: (Secundario) Esta eh uma maneira perfeitamente valida de inicializar aleatoriamente, 
 		// mas tambem pensei em outra: fazer uma particao exclusiva e so incluir os nos necessarios 
 		// para tornar cada subgrafo conectado. Qual a melhor? Nao sei. So testando... 
+		
+		int k = 0;
+		List<Integer> indexList = RandomUtil.shuffle(this.agentList);
+		
 		while(numAddedNodes < graph.getNumNodes()){
 			
-			Integer node = ListUtil.chooseAtRandom(agentList);
+			Integer node = indexList.get(k);
+			k = (++k) % indexList.size();
 					
 			Path path = allp.getPath(node, RandomUtil.chooseInteger(0, graph.getNumNodes() - 1));
 			
@@ -100,7 +105,7 @@ public class SimpleIndividual {
 				}
 			}
 			
-			//PAS: Tem varias formas de inicializar o ciclo. Esta é uma delas (ok).
+			//PAS: (secundario) Tem varias formas de inicializar o ciclo. Esta é uma delas (ok).
 			// Veja que inicializar envolve: 1) de particionar, 2) formar os ciclos.
 			// Seria bom ter varias formas de fazer cada um e parametrizar a escolha delas. 
 			agents.put(n,   new AgentMATP(n, new InducedSubGraph(nodes, graph)));
@@ -110,102 +115,31 @@ public class SimpleIndividual {
 	} 
 
 	
-	
-	public SimpleIndividual tweakCopy(){
-		SimpleIndividual i = new SimpleIndividual(this);
-		
-		while(this.equals(i)){
-			i.tweak();
-			
-		}
-		
-		return i;
-	}
-	
-	public VisitsList generateVisitList(int simulationTime){
-		
-		VisitsList v = new VisitsList();
 
-		for(Integer n: agentList){
-			v.addVisitList( ClosedPathFacility.fromClosedPathToVisitList(this.agents.get(n).getPath(), this.graph, simulationTime, n));			
-		}
-		
-		return v;
-	}
-	
-	//PAS: Nunca usado!
-	public void addRandomNode(Integer agent){
-		
-		if(RandomUtil.chooseBoolean()){
-			agents.get(agent).addRandomNodeWithSmallChanges();
-		}else{
-			agents.get(agent).addRandomNodeAndRebuildPath();
-		}
-
-	}
-	
-	
-	public void removeRandomNode(Integer agent){
-		
-		if(RandomUtil.chooseBoolean()){
-			agents.get(agent).removeRandomNodeWithSmallChanges();
-		}else{
-			agents.get(agent).removeRandomNodeAndRebuildPath();
-		}
-					
-	}
 	
 	public void tweak(){
 		
-		Integer agent = ListUtil.chooseAtRandom(agentList);
-		agents.get(agent).applyRandomTwoChange();
+		Integer agentNode = ListUtil.chooseAtRandom(this.agentList);
+		AgentMATP agent = this.agents.get(agentNode);
 		
-	}
-	
-	
-	private static SimpleIndividual[] fixedCrossOver(SimpleIndividual i1, SimpleIndividual i2, Integer agent){
 		
-		SimpleIndividual[] out = new SimpleIndividual[2];
-		
-		AgentMATP ag1 = i1.agents.get(agent);
-		AgentMATP ag2 = i2.agents.get(agent);
-		
-		out[0] = new SimpleIndividual(i1);
-		out[1] = new SimpleIndividual(i2);
-		
-		out[1].agents.put(agent, ag1);
-		out[0].agents.put(agent, ag2);
-		
-		return out;
-		
-	}
-	
-	
-	public static SimpleIndividual[] crossOver(SimpleIndividual i1, SimpleIndividual i2){
-		Integer n = RandomUtil.chooseInteger(0, i1.graph.getNumNodes() - 1 );
-		return fixedCrossOver(i1, i2, n);
-	}
-	
-	public static SimpleIndividual[] massiveCrossOver(SimpleIndividual i1, SimpleIndividual i2, List<Integer> agentList){
-		
-		SimpleIndividual[] out = new SimpleIndividual[agentList.size()];
-		SimpleIndividual[] aux;
-		int cnt = 0;
-		
-		for(Integer n: agentList){
-			aux = fixedCrossOver(i1, i2, n);
-			out[cnt++] = aux[0];
-			out[cnt++] = aux[1];
+		if(RandomUtil.chooseBoolean()){
+			agent.addRandomNodeAndRebuildPath();
+		}else{
+			agent.removeRandomNodeAndRebuildPath();
 		}
 		
-		return out;
+		
+		agent.twoChangeImprove(10);
+		
 		
 	}
 	
-	@Override
-	public String toString() {
-		return this.agents.toString();
-	}
+	
+
+	
+
+
 	
 	@Override
 	public boolean equals(Object obj) {
@@ -269,7 +203,7 @@ public class SimpleIndividual {
 		i2.tweak();
 		
 		 @SuppressWarnings("unused")
-		SimpleIndividual[] newS = SimpleIndividual.crossOver(i1, i2);
+		SimpleIndividual[] newS = (SimpleIndividual[])GenericMATPIndividual.crossOver(i1, i2);
 		 
 		 int i = 0;
 		 
@@ -288,11 +222,19 @@ public class SimpleIndividual {
 			 
 		 }
 		 
-		 
+	}
 
-		 
-		 
-		 
+
+
+	@Override
+	public GenericMATPIndividual copy() {
+		return new SimpleIndividual(this);
+	}
+
+
+	@Override
+	public void mutate() {
+		this.tweak();
 	}
 
 

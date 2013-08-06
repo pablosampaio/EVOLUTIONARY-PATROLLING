@@ -13,7 +13,6 @@ import yaps.graph_library.Path;
 import yaps.graph_library.PathBuilder;
 import yaps.util.RandomUtil;
 
-//PAS: Nunca usada?
 public class AgentMATP {
 
 	private Path path;
@@ -67,7 +66,7 @@ public class AgentMATP {
 			return;
 		}
 
-		//1 - 2 - 3 - 2 -  1
+		
 
 		int nodeIndex;
 		List<Integer> indexList = ListUtil.createIndexList(0, this.path.size() - 1, 1);
@@ -77,7 +76,7 @@ public class AgentMATP {
 		}while(path.get(nodeIndex).equals(centerNode));
 
 		if(nodeIndex == 0 || nodeIndex == (this.path.size() - 1)){
-			//1x - 2 - 3 - 4 - x1x
+		
 			  
 			this.path.removeFirst();
 			this.path.removeLast();
@@ -160,12 +159,8 @@ public class AgentMATP {
 
 		Path p = fatherG.getAllPaths().getPath(this.path.remove(i), node);
 		this.coveredNodesSet.addAll(p);
-		// 1 - 3 - 2 - 1
-		// add 5 ao 2 path: 2 - 6 - 7 - 5
-		// 1 - 3  - 2 - 2 - 1
-		// 1 - 3  - 2 - 6 - 6 - 2 - 1
-		// 1 - 3  - 2 - 6 - 7 - 7 - 6 - 2 - 1
-		// 1 - 3  - 2 - 6 - 7 - 5 - 7 - 6 - 2 - 1
+
+		
 		
 		for(int k = 0; k < p.size(); k++){
 		
@@ -222,7 +217,7 @@ public class AgentMATP {
 
 	public void removeRandomNodeAndRebuildPath(){
 
-		if(this.coveredNodesSet.size() < 2){
+		if(this.coveredNodesSet.size() < 3){
 			return;
 		}
 
@@ -279,6 +274,7 @@ public class AgentMATP {
 
 	public void twoChangeImprove(int nTimes){
 		while(nTimes-- > 0){
+
 			this.twoChangeImprove();
 		}
 	}
@@ -286,23 +282,23 @@ public class AgentMATP {
 
 	public void twoChangeImprove(){
 
-		Path oldPath = this.path;
+		Path oldPath = applyRandomTwoChange();
 
-		applyRandomTwoChange();
 
 		if(oldPath.getCost(inducedSubGraph) < this.path.getCost(inducedSubGraph)){
 			this.path = oldPath;
 		}
 
+		
 
 	}
 
 
-	public void applyRandomTwoChange(){
+	public Path applyRandomTwoChange(){
 
 		//At least four nodes!
 		if(this.path.size() < 5){
-			return;
+			return (Path)this.path.clone();
 		}
 
 
@@ -323,7 +319,7 @@ public class AgentMATP {
 
 		}
 
-		this.path = PathBuilder.twoChange(e1, e2, this.path, this.inducedSubGraph);
+		return PathBuilder.twoChange(e1, e2, this.path, this.inducedSubGraph);
 	}
 
 

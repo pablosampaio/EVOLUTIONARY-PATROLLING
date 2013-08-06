@@ -10,6 +10,12 @@ public class RandomUtil {
 	private static long SEED = 1613; 
 	private static Random rand = new Random(SEED);
 	
+	
+	public static void setNewSeed(long seed){
+		SEED = seed;
+		rand = new Random(SEED);
+	}
+	
 	/**
 	 * Randomly chooses an integer from the inclusive range "from .. to".  
 	 */

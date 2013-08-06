@@ -1,14 +1,13 @@
 package taia;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
+import taia.individual.GenericMATPIndividual;
 import yaps.graph_library.Graph;
 import yaps.graph_library.GraphDataRepr;
 import yaps.graph_library.GraphReader;
 import yaps.metrics.Metric;
 import yaps.metrics.VisitsList;
-import yaps.util.RandomUtil;
 
 public class HillClimb {
 	
@@ -62,9 +61,9 @@ public class HillClimb {
 	}
 
 
-	public SimpleIndividual doHillClimb(SimpleIndividual s, int numberIterations, Metric metrica){
+	public GenericMATPIndividual doHillClimb(GenericMATPIndividual s, int numberIterations, Metric metrica){
 		
-		SimpleIndividual r = null;
+		GenericMATPIndividual r = null;
 		
 		VisitsList vs = s.generateVisitList(simulationTime);
 		
@@ -72,8 +71,6 @@ public class HillClimb {
 		Metric metricCaltulator = metrica;
 		
 		
-		// PAS: As metricas boas individualmente sao: maximum interval / quadratic mean of intervals.
-		// Ajustar tambem em HillClimbWithRandomRestarts 
 		bestMetric = metricCaltulator.calculate(vs, numOFNodes, 1, simulationTime);
 		
 		System.out.println("Initial metric value:  " + bestMetric);
@@ -101,29 +98,15 @@ public class HillClimb {
 	
 	}
 	
-	public SimpleIndividual doHillClimb(int numberOfAgents, int numberIterations, Metric metrica) {
+	public GenericMATPIndividual doHillClimb(int numberIterations, Metric metrica, SimulationConstructor sc) {
 
-		//Generating a random initial solution
-		ArrayList<Integer> agentList = new ArrayList<Integer>();
-
-		for(int i = 0; i < numberOfAgents; i++) {
-
-			int agent = RandomUtil.chooseInteger(0, getNumOFNodes() -1);
-
-			while(agentList.contains(agent)){
-				agent = RandomUtil.chooseInteger(0, getNumOFNodes() -1);
-			}
-
-			agentList.add(agent);
-
-		}
-
-		SimpleIndividual s = new SimpleIndividual(agentList, getGraph());
+		
+		GenericMATPIndividual s = sc.buildNewRandomIndividual();
 
 		//Random initial solution generated
 		
 		
-		SimpleIndividual r = null;
+		GenericMATPIndividual r = null;
 		
 		VisitsList vs = s.generateVisitList(simulationTime);
 		
@@ -131,8 +114,6 @@ public class HillClimb {
 		Metric metricCaltulator = metrica;
 		
 		
-		// PAS: As metricas boas individualmente sao: maximum interval / quadratic mean of intervals.
-		// Ajustar tambem em HillClimbWithRandomRestarts 
 		bestMetric = metricCaltulator.calculate(vs, numOFNodes, 1, simulationTime);
 		
 		System.out.println("Initial Best Individual: "+s+"\n"+
@@ -146,6 +127,10 @@ public class HillClimb {
 			//System.out.println("After Tweak:"+r);
 			
 			metric = metricCaltulator.calculate( r.generateVisitList(simulationTime), numOFNodes, 1, simulationTime);
+			
+			
+			//System.out.println("New metric value:  " + metric);
+			
 			
 			if(metric < bestMetric){
 				bestMetric = metric;
@@ -165,8 +150,7 @@ public class HillClimb {
 	
 	public static void main(String[] args) throws IOException {
 		
-		//PAS: simplifiquei a chamada. mas não entendi pq vcs só querem listas. 
-		//o default é o mais otimizado, pois mantem listas AND matriz!
+
 		Graph g = GraphReader.readAdjacencyList("./maps/island11", GraphDataRepr.LISTS);
 		
 		HillClimb ch = new HillClimb(g, 1000);
@@ -179,7 +163,10 @@ public class HillClimb {
 		
 		SimpleIndividual s = new SimpleIndividual(agentList , new PreCalculedPathGraph(g));*/
 		
-		SimpleIndividual result = ch.doHillClimb(3, 100000, Metric.MAXIMUM_INTERVAL);
+		SimulationConstructor sc = new SimulationConstructor();
+		sc.setIndividualConstructorParameters(new PreCalculedPathGraph(g));
+		sc.setNumAgents(3);
+		GenericMATPIndividual result = ch.doHillClimb(100000, Metric.MAXIMUM_INTERVAL, sc);
 		
 		System.out.println("\n================================");
 		System.out.println("Final configuration:");

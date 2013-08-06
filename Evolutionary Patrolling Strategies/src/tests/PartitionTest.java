@@ -1,9 +1,11 @@
-package taia;
+package tests;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
+import taia.GraphEquipartition;
+import taia.PreCalculedPathGraph;
 import yaps.graph_library.GraphReader;
 import yaps.graph_library.InducedSubGraph;
 import yaps.graph_library.Path;

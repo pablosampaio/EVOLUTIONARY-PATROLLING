@@ -24,8 +24,6 @@ public class Path extends LinkedList<Integer> {
 		super(c);
 	}
 	
-	//PAS: Simplifiquei. Nao precisava criar, na verdade, porque a classe
-	//estende LinkedList...
 	public boolean existNode(int node){
 		return super.contains(node);
 		

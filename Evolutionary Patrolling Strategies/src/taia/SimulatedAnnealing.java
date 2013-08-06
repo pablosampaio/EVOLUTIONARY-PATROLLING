@@ -3,6 +3,8 @@ package taia;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import taia.individual.GenericMATPIndividual;
+import taia.individual.SimpleIndividual;
 import yaps.graph_library.Graph;
 import yaps.graph_library.GraphDataRepr;
 import yaps.graph_library.GraphReader;
@@ -17,7 +19,7 @@ public class SimulatedAnnealing extends HillClimb {
 		super(g, simulationTime);
 	}
 	
-	public SimpleIndividual simulatedAnnealing(int numberOfAgents, int numberOfIterations, double temperature, double tDecreaseFactor, Metric metrica) {
+	public GenericMATPIndividual simulatedAnnealing(int numberOfAgents, int numberOfIterations, double temperature, double tDecreaseFactor, Metric metrica) {
 		
 		int iterations = 0;
 		
@@ -35,21 +37,21 @@ public class SimulatedAnnealing extends HillClimb {
 			agentList.add(agent);
 			
 		}
-		
-		SimpleIndividual s = new SimpleIndividual(agentList, getGraph());
+		//FIXME do it generic!!!
+		GenericMATPIndividual s = new SimpleIndividual(agentList, getGraph());
 		
 		//Random initial solution generated
 
 		double qualityOfS = metrica.calculate(s.generateVisitList(this.getSimulationTime()), getNumOFNodes(), 1, getSimulationTime());
 		
-		SimpleIndividual best = s;
+		GenericMATPIndividual best = s;
 		double qualityOfBest = qualityOfS;
 		
 		System.out.println("Initial Best Individual: "+best+"\n"+
 							"Initial Best Metric Value: "+qualityOfBest
 							);
 		
-		SimpleIndividual r = null;
+		GenericMATPIndividual r = null;
 		
 		do{
 			iterations++;
@@ -100,7 +102,7 @@ public class SimulatedAnnealing extends HillClimb {
 		
 		SimulatedAnnealing sa = new SimulatedAnnealing(g, 1000);
 		
-		SimpleIndividual result = sa.simulatedAnnealing(3, 20000, 4.225, 0.0001, Metric.MAXIMUM_INTERVAL);
+		GenericMATPIndividual result = sa.simulatedAnnealing(3, 20000, 4.225, 0.0001, Metric.MAXIMUM_INTERVAL);
 		
 		double quality = Metric.MAXIMUM_INTERVAL.calculate(result.generateVisitList(sa.getSimulationTime()), sa.getNumOFNodes(), 1, sa.getSimulationTime());
 		

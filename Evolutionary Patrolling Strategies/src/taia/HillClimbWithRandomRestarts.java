@@ -3,6 +3,8 @@ package taia;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import taia.individual.GenericMATPIndividual;
+import taia.individual.SimpleIndividual;
 import yaps.graph_library.Graph;
 import yaps.graph_library.GraphDataRepr;
 import yaps.graph_library.GraphReader;
@@ -59,7 +61,7 @@ public class HillClimbWithRandomRestarts extends HillClimb {
 		
 	}*/
 	
-	public SimpleIndividual climbHillWithRandomRestarts(int numberOfAgents, int numberOfIterations, int[] distributionOfTimeIntervals, Metric metrica) {
+	public GenericMATPIndividual climbHillWithRandomRestarts(int numberOfAgents, int numberOfIterations, int[] distributionOfTimeIntervals, Metric metrica) {
 		
 		//S <- Some initial random candidate solution
 		
@@ -76,12 +78,12 @@ public class HillClimbWithRandomRestarts extends HillClimb {
 			agentList.add(agent);
 			
 		}
-		
-		SimpleIndividual s = new SimpleIndividual(agentList, getGraph());
+		//FIXME do it gereric!!!
+		GenericMATPIndividual s = new SimpleIndividual(agentList, getGraph());
 		
 		//We have successfully generated a initial random candidate solution
 		
-		SimpleIndividual best = s; //Best <- S
+		GenericMATPIndividual best = s; //Best <- S
 		
 		VisitsList vs = best.generateVisitList(this.getSimulationTime());
 		
@@ -130,7 +132,7 @@ public class HillClimbWithRandomRestarts extends HillClimb {
 				agentList.add(agent);
 				
 			}
-			
+			//FIXME do it gereric!!!
 			s = new SimpleIndividual(agentList, getGraph());
 			
 			//We have successfully generated a new random solution candidate
@@ -159,7 +161,7 @@ public class HillClimbWithRandomRestarts extends HillClimb {
 			distribution[i] = 5000;
 		}
 		
-		SimpleIndividual finalSolution = randomRestarts.climbHillWithRandomRestarts(3, 15, distribution, Metric.MAXIMUM_INTERVAL);
+		GenericMATPIndividual finalSolution = randomRestarts.climbHillWithRandomRestarts(3, 15, distribution, Metric.MAXIMUM_INTERVAL);
 		
 		System.out.println("Random Restarts: Final configuration:\n"+finalSolution+"\n================================\n");
 

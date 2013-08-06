@@ -4,14 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import taia.PreCalculedPathGraph;
-
 import yaps.graph_library.algorithms.AllPairsShortestPaths;
 
 public class InducedSubGraph extends Graph {
 
 	// public NodeSelectedSubGraph(int numVertices) {
 	// super(numVertices);
-	// TODO Auto-generated constructor stub
 	// }
 
 	private List<Integer> nodes;
@@ -73,12 +71,7 @@ public class InducedSubGraph extends Graph {
 
 	@Override
 	public Object clone(){
-		InducedSubGraph other = new InducedSubGraph();
-		other.graph = this.graph;
-		other.isConnected = this.isConnected;
-		other.nodes = new ArrayList<Integer>(this.nodes);
-		other.allPaths = this.allPaths;
-
+		InducedSubGraph other = new InducedSubGraph( new ArrayList<Integer>(this.nodes), this.graph);
 		return other;
 	}
 	

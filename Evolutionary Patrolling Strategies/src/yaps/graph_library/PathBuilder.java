@@ -3,7 +3,6 @@ package yaps.graph_library;
 import java.util.List;
 
 import yaps.graph_library.algorithms.AllPairsShortestPaths;
-
 import yaps.util.RandomUtil;
 
 public class PathBuilder {
@@ -296,22 +295,47 @@ public class PathBuilder {
 		//(0,1,2) - (nodes 3 to 5) - (5, 4) - (4 to 6) - (6, 7, 8 ....0)
 
 		Path nPath = new Path();
-
+		Integer now;
 
 		for(int k = 0; k < p.size(); k++){
 
 			if( k < edge1 ){
 				//Adds block A
-				nPath.add(p.get(k));
+				now = p.get(k);
+				
+				if(nPath.size() == 0){
+					nPath.add(now);
+				}else if(!nPath.peekLast().equals(now)){
+					nPath.add(now);
+				}
+				
 			
 			}else if (k == edge1){
 				//Adds a path between edge1 and edge2
 				Path p1 = allPath.getPath(p.get(edge1), p.get(edge2));
+				
+				now = p1.removeFirst();
+				
+				if(nPath.size() == 0){
+					nPath.add(now);
+				}else if(!nPath.peekLast().equals(now)){
+					nPath.add(now);
+				}
+
+				
 				nPath.addAll(p1);
 				
 			}else if( k < edge2 ){
 				//Adds B reversed
-				nPath.add(p.get(edge1 + edge2 - k));
+				
+				now = p.get(edge1 + edge2 - k);
+				
+				if(nPath.size() == 0){
+					nPath.add(now);
+				}else if(!nPath.peekLast().equals(now)){
+					nPath.add(now);
+				}
+				
 
 			}else if(k == edge2){
 			
@@ -326,7 +350,13 @@ public class PathBuilder {
 				
 			}else{
 				//Adds C
-				nPath.add(p.get(k));
+				now = p.get(k);
+				if(nPath.size() == 0){
+					nPath.add(now);
+				}else if(!nPath.peekLast().equals(now)){
+					nPath.add(now);
+				}
+				
 				
 			}
 
