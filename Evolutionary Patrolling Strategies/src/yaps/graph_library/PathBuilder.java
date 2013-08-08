@@ -1,8 +1,11 @@
 package yaps.graph_library;
 
+import java.io.IOException;
 import java.util.List;
 
+import taia.PreCalculedPathGraph;
 import yaps.graph_library.algorithms.AllPairsShortestPaths;
+import yaps.util.ListView;
 import yaps.util.RandomUtil;
 
 public class PathBuilder {
@@ -268,7 +271,7 @@ public class PathBuilder {
 	}
 
 
-
+	//PAS: Poderia ser bem mais simples com ListView...
 	public static Path twoChange(int edge1, int edge2, Path p, InducedSubGraph g){
 
 
@@ -365,6 +368,77 @@ public class PathBuilder {
 
 		return nPath;
 	} 	
+
+	//PAS: 2-change com ListView
+	/**
+	 * Efetua o operador 2-change sem expandir as arestas (trocando-os pelos menores caminhos),
+	 * que é deixado para uma etapa posterior. Retorna um novo caminho resultante da operação. 
+	 * <br><br>
+	 * Exemplo: 
+	 * - path = [A, B, C, D, E, A]  (n=6)
+	 * - srcNode1 = 1 (foi quebrada a aresta B-C) 
+	 * - srcNode2 = 3 (foi quebrada a aresta D-E)
+	 * => saida: [E, A, B, D, C, E]
+	 * <br><br>
+	 * Recebe: <ul>
+	 * <li>sourceNode1, índice do nó de origem da 1a areasta "quebrada" (range: [0, n-2])
+	 * <li>sourceNode2: índice do nó de origem da 2a areatas "quebrada" (range: [srcNode1, n-2])
+	 * <li>p: o caminho</ul> 
+	 */
+	public static Path twoChange(Path path, int srcNode1, int srcNode2) {
+		assert(srcNode2 >= srcNode1);
+		assert(path.isCycle());
+
+		//casos especiais: se for a mesma aresta ou se forem consecutivas
+		if ((srcNode2 - srcNode1) <= 1) {
+			return new Path(path);
+		}
+	
+		ListView<Integer> partAbegin = new ListView<>(path, srcNode2+1);
+		ListView<Integer> partAend = new ListView<>(path, 1, srcNode1);  //excludes the first one because it is included in the end of partAbegin
+		
+		Path newPath = new Path(partAbegin);
+		newPath.addAll(partAend);
+		//System.out.println("\t-> part A: " + newPath);
+		
+		ListView<Integer> partBreverted = new ListView<>(path, srcNode2, srcNode1+1); //isso garante a inversão, pq srcNode2 > srcNode1
+
+		newPath.addAll(partBreverted);
+		//System.out.println("\t-> part B reverted: " + partBreverted);
+		
+		newPath.add(newPath.getFirst());
+		
+		return newPath;
+	}
+	
+	//PAS: Desafio - implementem esse.
+	/**
+	 * Recebe array srcNodes tal que: para todo i > j --> srcNodes[i] > srcNodes[j].
+	 * Alem disso, invert[i] indica se o trecho que termina em srcNodes[i] vai ou não
+	 * ser invertido (ou seja, se tudo for true, retorna o mesmo caminho).
+	 */
+	public static Path kChange(Path path, int[] srcNodes, boolean[] invert) {
+		return null;
+	}
+	
+	public static void main(String[] args) throws IOException {
+		PreCalculedPathGraph graph = new PreCalculedPathGraph( GraphReader.readAdjacencyList("./maps/complete15") );
+
+		Path path = new Path(); 
+		path.add(0); path.add(1); path.add(2); path.add(3); path.add(4); path.add(0);
+		
+		List<Integer> nodes = (List<Integer>)path.clone();  
+		
+		InducedSubGraph subg = new InducedSubGraph(nodes, graph);
+		
+		System.out.printf("ORIGINAL PATH: %s\n", path);
+		
+//		System.out.printf("=> 2-change (v1): %s\n", PathBuilder.twoChange(1, 3, path, subg));
+
+		Path p = PathBuilder.twoChange(path, 1, 3);
+		System.out.printf("=> 2-change (sem expandir): %s\n", p);
+		System.out.printf("=> 2-change (expandido): %s\n", p.expandShortestPaths(subg.getAllPaths()));
+	}
 
 
 }

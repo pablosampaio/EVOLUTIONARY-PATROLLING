@@ -70,8 +70,9 @@ public class MuLambdaStrategy {
 			P.add( best );
 		}
 
-		//PAS: Nem precisa desse calculo da metrica. Tambem fica estranho, mas funciona. 
-		//Neste caso convem explicar aqui em um comentario.  
+		/*PAS: Nem precisa desse calculo da metrica, se o valor inicial da metrica for inicializado
+		       com Integer.MAX_VALUE. Tambem fica estranho, mas funciona. 
+		       Neste caso convem explicar aqui em um comentario. */  
 		best.assessFitness(sc.getMetric(), sc.getSimulationTime());
 
 		while(time-- > 0){

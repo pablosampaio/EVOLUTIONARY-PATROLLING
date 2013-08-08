@@ -58,7 +58,7 @@ public class Path extends LinkedList<Integer> {
 	 * Tests if the start and end vertex of the path are the same 
 	 * i.e. tests if this is a closed path (not necessarily simple).
 	 */
-	public boolean isCycle(Graph graph) {
+	public boolean isCycle() {
 		return (super.getFirst() == super.getLast());
 	}
 	

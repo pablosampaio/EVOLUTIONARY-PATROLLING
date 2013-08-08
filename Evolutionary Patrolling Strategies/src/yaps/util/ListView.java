@@ -117,6 +117,8 @@ public class ListView<E> extends AbstractList<E> {
 
 		System.out.println("VIEW_1 reversed: " + view1.reverse() + ", tamanho " + view1.reverse().size());
 		System.out.println("VIEW_4 reversed: " + view4.reverse() + ", tamanho " + view4.reverse().size());
+		
+		//view6.add(0); //can't do that!
 	}
 
 }
