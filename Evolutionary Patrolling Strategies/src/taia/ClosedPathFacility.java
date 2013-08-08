@@ -6,6 +6,7 @@ import yaps.metrics.VisitsList;
 
 //PAS: (Secundario:) Uma classe só para uma função? Repensar...
 //Veja o que fiz com a classe PathFunctions - coloquei tudo em Path e apaguei a classe.
+//Colocar isso em AgentMATP
 public class ClosedPathFacility {
 
 	

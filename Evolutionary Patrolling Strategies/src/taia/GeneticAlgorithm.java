@@ -16,11 +16,9 @@ public class GeneticAlgorithm {
 	private int popSize;
 	private SimulationConstructor sc;
 
-
-
+	
+    //PAS: Caramba, vcs colocam linha em branco demais... (Ok)
 	public GeneticAlgorithm(int popSize, SimulationConstructor sc){
-		//Asserts that lambda is multiple of mu
-		//FIXME look for a ceil function for integers
 		this.popSize = 2 * (popSize/2 + 1);
 		this.sc = sc;
 	}
@@ -63,7 +61,9 @@ public class GeneticAlgorithm {
 			RandomUtil.shuffleInline(indexList);
 			 
 			for(int i = 0; i < (this.popSize/2); i++){
-				
+				/*PAS: Nao entendi esses indices 2*i e 2*i+1. Se quiser aleatorio, bastaria 0 e 1? 
+				       Porem, aqui tem que acontecer uma selecao! Um tournment seria a opcao 
+				       padrao, mas o ideal seria parametrizar isso. */
 				GenericMATPIndividual pi = P[ indexList.get(2*i) ];
 				GenericMATPIndividual pj = P[ indexList.get(2*i+1) ];
 				

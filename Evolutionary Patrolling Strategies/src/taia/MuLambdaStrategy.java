@@ -64,11 +64,14 @@ public class MuLambdaStrategy {
 		
 		GenericMATPIndividual best = null;
 
+        //PAS: Estranho - escolhe qualquer um como "best"? Funciona, mas foi proposital?
 		for(int i = 0; i < this.lambda; i++){
 			best = sc.buildNewRandomIndividual();
 			P.add( best );
 		}
 
+		//PAS: Nem precisa desse calculo da metrica. Tambem fica estranho, mas funciona. 
+		//Neste caso convem explicar aqui em um comentario.  
 		best.assessFitness(sc.getMetric(), sc.getSimulationTime());
 
 		while(time-- > 0){

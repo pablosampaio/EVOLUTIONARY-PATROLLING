@@ -3,6 +3,9 @@ package taia;
 import taia.individual.GenericMATPIndividual;
 import yaps.util.RandomUtil;
 
+/* PAS: Faltou o principal: tournment (com um parâmetro k).
+ * Pensar: criar como subclasses?
+ */
 public class Selections {
 
 
@@ -85,7 +88,7 @@ public class Selections {
 
 	}
 
-	
+	//PAS: Deveria selecionar k distintos (sem repetição).
 	public static GenericMATPIndividual randomFitnessBaseadTournamentSelection(GenericMATPIndividual[] P, int tournamentSize){
 		
 		GenericMATPIndividual best = P[RandomUtil.chooseInteger(0, P.length - 1)];

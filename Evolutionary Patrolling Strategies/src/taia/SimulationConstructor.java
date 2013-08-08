@@ -9,6 +9,10 @@ import taia.individual.SimpleIndividual;
 import yaps.metrics.Metric;
 import yaps.util.RandomUtil;
 
+/* PAS: Acho esta classe desnecessaria. Isso tudo pode ser 
+ * parametro das metaheuristicas (talvez passadas para os 
+ * construtores delas).
+ */
 public class SimulationConstructor {
 	
 	

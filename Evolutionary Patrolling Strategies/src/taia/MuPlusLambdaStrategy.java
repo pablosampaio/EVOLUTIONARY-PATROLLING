@@ -31,6 +31,12 @@ public class MuPlusLambdaStrategy {
 		insertOnQ(pi, Q, 0);
 	}
 
+    /* PAS: Este e um procedimento recursivo não muito eficiente.
+     * E melhor inserir tudo no fim e ordenar depois (e.g. com quicksort).
+     * Para facilitar, use LinkedList e chame o metodo Collections.sort().
+     * A rigor, isso eh um tipo de selecao, que poderia ser incluido na
+     * classe Selection.
+     */
 	private void insertOnQ(GenericMATPIndividual pi, GenericMATPIndividual[] Q, int i){
 		if(i >= this.mu){
 			return;
