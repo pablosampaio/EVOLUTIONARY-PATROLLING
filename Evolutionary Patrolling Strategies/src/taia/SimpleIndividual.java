@@ -1,27 +1,28 @@
-package taia.individual;
+package taia;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import taia.AgentMATP;
-import taia.GraphEquipartition;
-import taia.PreCalculedPathGraph;
-import taia.util.ListUtil;
-import yaps.graph_library.GraphReader;
 import yaps.graph_library.InducedSubGraph;
 import yaps.graph_library.Path;
 import yaps.graph_library.algorithms.AllPairsShortestPaths;
 import yaps.util.RandomUtil;
 
-public class SimpleIndividual extends GenericMATPIndividual{
+public class SimpleIndividual implements Comparable<SimpleIndividual>{
+
+	protected HashMap<Integer, AgentMATP> agents;
+	protected PreCalculedPathGraph graph;
+	protected List<Integer> agentList;
+	private double metricValue;
 
 	
+	public void setMetricValue(double metricValue) {
+		this.metricValue = metricValue;
+	}
 
-	
-	
-	
+
+
 	public SimpleIndividual(List<Integer> fixedNodeList, PreCalculedPathGraph graph){
 			
 		agentList = fixedNodeList;
@@ -105,6 +106,20 @@ public class SimpleIndividual extends GenericMATPIndividual{
 				}
 			}
 			
+			//Garante que nenhum indivíduo é inicializado em um caminho de um único nó.
+			//É bem raro, mas pode acontecer devido aos fatores aleatórios
+			//Gera bugs mais adiante.
+			while (nodes.size() < 2){
+				Path path = allp.getPath(n, RandomUtil.chooseInteger(0, graph.getNumNodes() - 1));
+				
+				for(Integer p: path){
+					if(!nodes.contains(p)){
+						nodes.add(p);
+					}
+				}
+			}
+			
+			
 			//PAS: (secundario) Tem varias formas de inicializar o ciclo. Esta é uma delas (ok).
 			// Veja que inicializar envolve: 1) de particionar, 2) formar os ciclos.
 			// Seria bom ter varias formas de fazer cada um e parametrizar a escolha delas. 
@@ -116,7 +131,7 @@ public class SimpleIndividual extends GenericMATPIndividual{
 
 	
 
-	
+/*	
 	public void tweak(){
 		
 		Integer agentNode = ListUtil.chooseAtRandom(this.agentList);
@@ -133,14 +148,54 @@ public class SimpleIndividual extends GenericMATPIndividual{
 		agent.twoChangeImprove(10);
 		
 		
+	}*/
+	
+	public AgentMATP getAgentMATP(Integer agent){
+		return this.agents.get(agent);
+	} 
+
+	public void setgetAgentMATP(Integer agent, AgentMATP rep){
+		this.agents.put(agent, rep);
+	}
+	
+	public void addRandomNodeAndRebuilOnAgent(Integer agent){
+		this.agents.get(agent).addRandomNodeAndRebuildPath();
+	}
+
+	public void addRandomNodeWithSmallChangesOnAgent(Integer agent){
+		this.agents.get(agent).addRandomNodeWithSmallChanges();
+	}
+	
+	public void removeRandomNodeAndRebuildOnAgent(Integer agent){
+		this.agents.get(agent).removeRandomNodeAndRebuildPath();
+	}
+	
+	public void removeRandomNodeWithSmallChangesOnAgent(Integer agent){
+		this.agents.get(agent).removeRandomNodeWithSmallChanges();
 	}
 	
 	
-
+	public void improveAgentByTwoChange(Integer agent){
+		this.agents.get(agent).twoChangeImprove();
+	}
 	
-
-
+	public List<Integer> getAgentsCentralNodesList(){
+		return this.agentList;
+	}
 	
+	
+	public PreCalculedPathGraph getGraph() {
+		return graph;
+	}
+
+
+
+	public void setGraph(PreCalculedPathGraph graph) {
+		this.graph = graph;
+	}
+
+
+
 	@Override
 	public boolean equals(Object obj) {
 		
@@ -185,58 +240,29 @@ public class SimpleIndividual extends GenericMATPIndividual{
 		return true;
 	}
 
-	@Override
-	public Object clone() throws CloneNotSupportedException {
+	public SimpleIndividual copy() {
 		return new SimpleIndividual(this);
 	}
 
-	public static void main(String[] args) throws IOException {
-		
-		PreCalculedPathGraph g = new PreCalculedPathGraph(GraphReader.readAdjacencyList("./maps/island11"));
-		
-		List<Integer> centerList = GraphEquipartition.maximumDistance(4, g);	
-		
-		SimpleIndividual i1 = new SimpleIndividual(centerList, g);
-		SimpleIndividual i2 = new SimpleIndividual(centerList, g);
-		
-		i1.tweak();
-		i2.tweak();
-		
-		 @SuppressWarnings("unused")
-		SimpleIndividual[] newS = (SimpleIndividual[])GenericMATPIndividual.crossOver(i1, i2);
-		 
-		 int i = 0;
-		 
-		 while(true){
-			 i++;
-			 i1 = new SimpleIndividual(centerList, g);
-			 
-			 for(Integer j: i1.agentList){
-				 if(i1.agents.get(j).getPath().isEmpty()){
-					 System.out.println("aqui!!!!");
-					 System.out.println(" "  + i + "  ");
-					 return;
-				 }
-			 }
-			 
-			 
-		 }
-		 
+	public double getMetricValue() {
+		return metricValue;
+	}
+
+	@Override
+	public String toString() {
+		return this.agents.toString() + (metricValue == 0? "": "\nmetric: " + this.metricValue);
 	}
 
 
 
 	@Override
-	public GenericMATPIndividual copy() {
-		return new SimpleIndividual(this);
+	public int compareTo(SimpleIndividual o) {
+		if(this.metricValue < o.metricValue){
+			return -1;
+		}else if(this.metricValue == o.metricValue){
+			return 0;
+		}
+		return 1;
 	}
-
-
-	@Override
-	public void mutate() {
-		this.tweak();
-	}
-
-
-
+	
 }

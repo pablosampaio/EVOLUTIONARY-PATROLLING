@@ -1,14 +1,10 @@
 package taia;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
-import taia.individual.GenericMATPIndividual;
-import taia.individual.SimpleIndividual;
 import yaps.graph_library.Graph;
 import yaps.graph_library.GraphDataRepr;
 import yaps.graph_library.GraphReader;
-import yaps.metrics.Metric;
 import yaps.util.RandomUtil;
 
 public class SimulatedAnnealing extends HillClimb {
@@ -19,46 +15,34 @@ public class SimulatedAnnealing extends HillClimb {
 		super(g, simulationTime);
 	}
 	
-	public GenericMATPIndividual simulatedAnnealing(int numberOfAgents, int numberOfIterations, double temperature, double tDecreaseFactor, Metric metrica) {
+	public SimpleIndividual simulatedAnnealing(int numberOfIterations, double temperature, double tDecreaseFactor) {
 		
 		int iterations = 0;
 		
 		//Generating a random initial solution
-		ArrayList<Integer> agentList = new ArrayList<Integer>();
-		
-		for(int i = 0; i < numberOfAgents; i++) {
-			
-			int agent = RandomUtil.chooseInteger(0, getNumOFNodes() -1);
-			
-			while(agentList.contains(agent)){
-				agent = RandomUtil.chooseInteger(0, getNumOFNodes() -1);
-			}
-			
-			agentList.add(agent);
-			
-		}
-		//FIXME do it generic!!!
-		GenericMATPIndividual s = new SimpleIndividual(agentList, getGraph());
+		SimpleIndividual s = this.getIndividualBuilder().buildNewRandomIndividual();
 		
 		//Random initial solution generated
 
-		double qualityOfS = metrica.calculate(s.generateVisitList(this.getSimulationTime()), getNumOFNodes(), 1, getSimulationTime());
+		double qualityOfS = this.getMetricFacility().assessFitness(s);
 		
-		GenericMATPIndividual best = s;
+		SimpleIndividual best = s;
 		double qualityOfBest = qualityOfS;
 		
 		System.out.println("Initial Best Individual: "+best+"\n"+
 							"Initial Best Metric Value: "+qualityOfBest
 							);
 		
-		GenericMATPIndividual r = null;
+		SimpleIndividual r = null;
 		
 		do{
 			iterations++;
 			
-			r = s.tweakCopy();
+			r = s.copy();
 			
-			double qualityOfR = metrica.calculate(r.generateVisitList(getSimulationTime()), getNumOFNodes(), 1, getSimulationTime());
+			this.getMutate().mutate(r);
+			
+			double qualityOfR = this.getMetricFacility().assessFitness(r);
 			
 			//System.out.print("Generated individual has the following metric: "+qualityOfR+"\r");
 			
@@ -102,12 +86,11 @@ public class SimulatedAnnealing extends HillClimb {
 		
 		SimulatedAnnealing sa = new SimulatedAnnealing(g, 1000);
 		
-		GenericMATPIndividual result = sa.simulatedAnnealing(3, 20000, 4.225, 0.0001, Metric.MAXIMUM_INTERVAL);
+		SimpleIndividual result = sa.simulatedAnnealing(20000, 4.225, 0.0001);
 		
-		double quality = Metric.MAXIMUM_INTERVAL.calculate(result.generateVisitList(sa.getSimulationTime()), sa.getNumOFNodes(), 1, sa.getSimulationTime());
 		
 		System.out.println("=========================================================\nFinal configuration: "+result+"\n"+
-		"Final configuration metric: "+quality);
+		"Final configuration metric: "+result.getMetricValue());
 		
 		
 

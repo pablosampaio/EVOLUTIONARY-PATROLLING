@@ -1,20 +1,17 @@
 package taia;
 
 import java.io.IOException;
-import java.util.List;
 
 import taia.strategies.CrossOver;
 import taia.strategies.IndividualBuilder;
 import taia.strategies.Mutate;
 import taia.strategies.Selection;
-import taia.util.ListUtil;
 import taia.util.MetricFacility;
 import yaps.graph_library.Graph;
 import yaps.graph_library.GraphDataRepr;
 import yaps.graph_library.GraphReader;
-import yaps.util.RandomUtil;
 
-public class GeneticAlgorithm {
+public class GeneticAlgorithmWithElitism {
 
 	private int popSize;
 	private Mutate mut = new Mutate();
@@ -22,22 +19,23 @@ public class GeneticAlgorithm {
 	private IndividualBuilder indb = new IndividualBuilder();
 	private CrossOver	cross =  new CrossOver();
 	private Selection select = new Selection();
+	private int elitism;
 
 	
-	public GeneticAlgorithm(int popSize){
-		this.popSize = 2 * (popSize/2 + 1);
+	public GeneticAlgorithmWithElitism(int popSize, int elistism){
+		this.elitism = elistism;
+		this.popSize = elistism + 2 * ((popSize - elistism)/2 + 1);
 	}
 
 	public SimpleIndividual doEvolvePopulation(int time){
 
 		
-		SimpleIndividual[] P, Q;
+		SimpleIndividual[] P, Q, Elite;
 
 
 		P = new SimpleIndividual[this.popSize];
 		Q = new SimpleIndividual[this.popSize];
-		
-		List<Integer> indexList =ListUtil.createIndexList(0, this.popSize, 1);
+		Elite = new SimpleIndividual[this.elitism];
 		
 		SimpleIndividual best = null;
 
@@ -57,17 +55,21 @@ public class GeneticAlgorithm {
 				this.mtf.assessFitness(pi);
 
 				if( best.getMetricValue() > pi.getMetricValue() ){
+					System.out.println("Old Metric value:"  + best.getMetricValue());
 					System.out.println("New metric value: " + pi.getMetricValue() );
 					best = pi;
 				}
 
 		
 			}
+		
+			Elite = this.select.selectManyFromMany(P, elitism);
 			
-			
-			RandomUtil.shuffleInline(indexList);
+			for(int i = 0; i < this.elitism; i++){
+				Q[i] = Elite[i].copy();
+			}
 			 
-			for(int i = 0; i < (this.popSize/2); i++){
+			for(int i = 0; i < ((this.popSize - this.elitism)/2); i++){
 
 				SimpleIndividual pi = select.selectOneFromMany( P );
 				SimpleIndividual pj = select.selectOneFromMany( P );
@@ -78,8 +80,8 @@ public class GeneticAlgorithm {
 				mut.mutate(c[1]);
 
 				
-				Q[ 2*i ] = c[0];
-				Q[ 2*i + 1] =  c[1];
+				Q[this.elitism + 2*i ] = c[0];
+				Q[this.elitism + 2*i + 1] =  c[1];
 				
 			}
 
@@ -103,10 +105,9 @@ public class GeneticAlgorithm {
 		Graph g = GraphReader.readAdjacencyList("./maps/island11", GraphDataRepr.LISTS);
 		
 		
-		GeneticAlgorithm melambe = new GeneticAlgorithm(200);
+		GeneticAlgorithmWithElitism melambe = new GeneticAlgorithmWithElitism(50, 10);
 		melambe.indb.setGraph(new PreCalculedPathGraph(g));
 		melambe.indb.setUpBuilder();
-		
 		
 		melambe.doEvolvePopulation(1000);
 

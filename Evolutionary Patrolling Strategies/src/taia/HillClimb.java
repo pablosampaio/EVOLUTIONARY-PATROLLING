@@ -2,12 +2,12 @@ package taia;
 
 import java.io.IOException;
 
-import taia.individual.GenericMATPIndividual;
+import taia.strategies.IndividualBuilder;
+import taia.strategies.Mutate;
+import taia.util.MetricFacility;
 import yaps.graph_library.Graph;
 import yaps.graph_library.GraphDataRepr;
 import yaps.graph_library.GraphReader;
-import yaps.metrics.Metric;
-import yaps.metrics.VisitsList;
 
 public class HillClimb {
 	
@@ -17,8 +17,23 @@ public class HillClimb {
 	
 	private double bestMetric;
 
-	
-	
+	private Mutate mut = new Mutate();
+	private MetricFacility mtf = new MetricFacility();
+	private IndividualBuilder indb = new IndividualBuilder();
+
+
+	public Mutate getMutate() { return mut;}
+
+	public void setMutate(Mutate mut) { this.mut = mut; }
+
+	public MetricFacility getMetricFacility() { return mtf; }
+
+	public void setMetricFacility(MetricFacility mtf) { this.mtf = mtf; }
+
+	public IndividualBuilder getIndividualBuilder() { return indb; 	}
+
+	public void setIndividualBuilder(IndividualBuilder indb) { this.indb = indb; }
+
 	
 	public HillClimb(String graphFileName) throws IOException{
 		 this(GraphReader.readAdjacencyList(graphFileName));
@@ -33,12 +48,15 @@ public class HillClimb {
 
 	public HillClimb(Graph g, int simulationTime){
 		this(g);
+		this.mtf.setSimulationTime(simulationTime);
 		this.simulationTime = simulationTime;
 	}
 	
 	public HillClimb(Graph g){
 		this.numOFNodes = g.getNumNodes();
 		this.graph = new PreCalculedPathGraph(g);
+		this.indb.setGraph(graph);
+		this.indb.setUpBuilder();
 	}
 	
 	public int getSimulationTime() {
@@ -61,27 +79,27 @@ public class HillClimb {
 	}
 
 
-	public GenericMATPIndividual doHillClimb(GenericMATPIndividual s, int numberIterations, Metric metrica){
+	public SimpleIndividual doHillClimb(SimpleIndividual s, int numberIterations){
 		
-		GenericMATPIndividual r = null;
+		SimpleIndividual r = null;
 		
-		VisitsList vs = s.generateVisitList(simulationTime);
+		
 		
 		double bestMetric, metric;
-		Metric metricCaltulator = metrica;
 		
-		
-		bestMetric = metricCaltulator.calculate(vs, numOFNodes, 1, simulationTime);
+	
+		bestMetric = mtf.assessFitness(s);
 		
 		System.out.println("Initial metric value:  " + bestMetric);
 		//System.out.println(intervalReport);
 		
 		while(numberIterations-- > 0){
 			//System.out.println("Before Tweak:"+s);
-			r = s.tweakCopy();
+			r = s.copy();
+			mut.mutate(r);
 			//System.out.println("After Tweak:"+r);
 			
-			metric = metricCaltulator.calculate( r.generateVisitList(simulationTime), numOFNodes, 1, simulationTime);
+			metric = mtf.assessFitness(r);
 			
 			if(metric < bestMetric){
 				bestMetric = metric;
@@ -98,53 +116,9 @@ public class HillClimb {
 	
 	}
 	
-	public GenericMATPIndividual doHillClimb(int numberIterations, Metric metrica, SimulationConstructor sc) {
-
-		
-		GenericMATPIndividual s = sc.buildNewRandomIndividual();
-
+	public SimpleIndividual doHillClimb(int numberIterations) {
 		//Random initial solution generated
-		
-		
-		GenericMATPIndividual r = null;
-		
-		VisitsList vs = s.generateVisitList(simulationTime);
-		
-		double bestMetric, metric;
-		Metric metricCaltulator = metrica;
-		
-		
-		bestMetric = metricCaltulator.calculate(vs, numOFNodes, 1, simulationTime);
-		
-		System.out.println("Initial Best Individual: "+s+"\n"+
-				"Initial Best Metric Value: "+bestMetric
-				);
-		//System.out.println(intervalReport);
-		
-		while(numberIterations-- > 0){
-			//System.out.println("Before Tweak:"+s);
-			r = s.tweakCopy();
-			//System.out.println("After Tweak:"+r);
-			
-			metric = metricCaltulator.calculate( r.generateVisitList(simulationTime), numOFNodes, 1, simulationTime);
-			
-			
-			//System.out.println("New metric value:  " + metric);
-			
-			
-			if(metric < bestMetric){
-				bestMetric = metric;
-				s = r;
-				System.out.println("New metric value:  " + bestMetric);
-			}
-			
-			
-		}
-		
-		this.bestMetric = bestMetric;
-	
-		return s;
-		
+		return doHillClimb(indb.buildNewRandomIndividual(), numberIterations);
 		
 	}
 	
@@ -163,10 +137,11 @@ public class HillClimb {
 		
 		SimpleIndividual s = new SimpleIndividual(agentList , new PreCalculedPathGraph(g));*/
 		
-		SimulationConstructor sc = new SimulationConstructor();
-		sc.setIndividualConstructorParameters(new PreCalculedPathGraph(g));
-		sc.setNumAgents(3);
-		GenericMATPIndividual result = ch.doHillClimb(100000, Metric.MAXIMUM_INTERVAL, sc);
+		
+		//ch.indb.setIndividualConstructorParameters(new PreCalculedPathGraph(g));
+		ch.indb.setNumAgents(3);
+	
+		SimpleIndividual result = ch.doHillClimb(100000);
 		
 		System.out.println("\n================================");
 		System.out.println("Final configuration:");

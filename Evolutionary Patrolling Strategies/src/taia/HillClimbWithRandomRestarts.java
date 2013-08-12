@@ -1,15 +1,10 @@
 package taia;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
-import taia.individual.GenericMATPIndividual;
-import taia.individual.SimpleIndividual;
 import yaps.graph_library.Graph;
 import yaps.graph_library.GraphDataRepr;
 import yaps.graph_library.GraphReader;
-import yaps.metrics.Metric;
-import yaps.metrics.VisitsList;
 import yaps.util.RandomUtil;
 
 public class HillClimbWithRandomRestarts extends HillClimb {
@@ -61,36 +56,19 @@ public class HillClimbWithRandomRestarts extends HillClimb {
 		
 	}*/
 	
-	public GenericMATPIndividual climbHillWithRandomRestarts(int numberOfAgents, int numberOfIterations, int[] distributionOfTimeIntervals, Metric metrica) {
+	public SimpleIndividual climbHillWithRandomRestarts(int numberOfIterations, int[] distributionOfTimeIntervals) {
 		
 		//S <- Some initial random candidate solution
-		
-		ArrayList<Integer> agentList = new ArrayList<Integer>();
-		
-		for(int i = 0; i < numberOfAgents; i++) {
-			
-			int agent = RandomUtil.chooseInteger(0, getNumOFNodes() -1);
-			
-			while(agentList.contains(agent)){
-				agent = RandomUtil.chooseInteger(0, getNumOFNodes() -1);
-			}
-			
-			agentList.add(agent);
-			
-		}
-		//FIXME do it gereric!!!
-		GenericMATPIndividual s = new SimpleIndividual(agentList, getGraph());
+		SimpleIndividual s = this.getIndividualBuilder().buildNewRandomIndividual();
 		
 		//We have successfully generated a initial random candidate solution
 		
-		GenericMATPIndividual best = s; //Best <- S
-		
-		VisitsList vs = best.generateVisitList(this.getSimulationTime());
-		
-		double qualityOfBest;
+		SimpleIndividual best = s; //Best <- S
 		
 		
-		qualityOfBest = metrica.calculate(vs, getNumOFNodes(), 1, getSimulationTime());
+		double qualityOfBest = this.getMetricFacility().assessFitness(s);
+		
+	
 		
 		System.out.println("RandomRestarts: Initial configuration:  \n" + best+"\n");
 		
@@ -102,7 +80,7 @@ public class HillClimbWithRandomRestarts extends HillClimb {
 			
 			System.out.println("==========================================================\nHill Climb");
 			
-			s = this.doHillClimb(s, time, metrica);
+			s = this.doHillClimb(s, time);
 			
 			double qualityOfS = this.getBestMetric(); //Attention!!! "Best Metric" from the hill climb!!
 			//Do not misunderstand!
@@ -117,23 +95,8 @@ public class HillClimbWithRandomRestarts extends HillClimb {
 				
 			}
 			
-			//S <- Some random candidate solution
-			
-			agentList = new ArrayList<Integer>();
-			
-			for(int i = 0; i < numberOfAgents; i++) {
-				
-				int agent = RandomUtil.chooseInteger(0, getNumOFNodes() -1);
-				
-				while(agentList.contains(agent)){
-					agent = RandomUtil.chooseInteger(0, getNumOFNodes() -1);
-				}
-				
-				agentList.add(agent);
-				
-			}
-			//FIXME do it gereric!!!
-			s = new SimpleIndividual(agentList, getGraph());
+			//S <- Some initial random candidate solution
+			s = this.getIndividualBuilder().buildNewRandomIndividual();
 			
 			//We have successfully generated a new random solution candidate
 			
@@ -158,10 +121,13 @@ public class HillClimbWithRandomRestarts extends HillClimb {
 		int[] distribution = new int[10];
 		
 		for(int i = 0; i < 10; i++) {
-			distribution[i] = 5000;
+			distribution[i] = 1000;
 		}
 		
-		GenericMATPIndividual finalSolution = randomRestarts.climbHillWithRandomRestarts(3, 15, distribution, Metric.MAXIMUM_INTERVAL);
+		randomRestarts.getIndividualBuilder().setNumAgents(3);
+		randomRestarts.getIndividualBuilder().setUpBuilder();
+		
+		SimpleIndividual finalSolution = randomRestarts.climbHillWithRandomRestarts(15, distribution);
 		
 		System.out.println("Random Restarts: Final configuration:\n"+finalSolution+"\n================================\n");
 
