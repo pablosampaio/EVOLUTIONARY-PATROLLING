@@ -372,7 +372,7 @@ public class PathBuilder {
 	//PAS: 2-change com ListView
 	/**
 	 * Efetua o operador 2-change sem expandir as arestas (trocando-os pelos menores caminhos),
-	 * que é deixado para uma etapa posterior. Retorna um novo caminho resultante da operação. 
+	 * que ï¿½ deixado para uma etapa posterior. Retorna um novo caminho resultante da operaï¿½ï¿½o. 
 	 * <br><br>
 	 * Exemplo: 
 	 * - path = [A, B, C, D, E, A]  (n=6)
@@ -381,8 +381,8 @@ public class PathBuilder {
 	 * => saida: [E, A, B, D, C, E]
 	 * <br><br>
 	 * Recebe: <ul>
-	 * <li>sourceNode1, índice do nó de origem da 1a areasta "quebrada" (range: [0, n-2])
-	 * <li>sourceNode2: índice do nó de origem da 2a areatas "quebrada" (range: [srcNode1, n-2])
+	 * <li>sourceNode1, ï¿½ndice do nï¿½ de origem da 1a areasta "quebrada" (range: [0, n-2])
+	 * <li>sourceNode2: ï¿½ndice do nï¿½ de origem da 2a areatas "quebrada" (range: [srcNode1, n-2])
 	 * <li>p: o caminho</ul> 
 	 */
 	public static Path twoChange(Path path, int srcNode1, int srcNode2) {
@@ -394,14 +394,14 @@ public class PathBuilder {
 			return new Path(path);
 		}
 	
-		ListView<Integer> partAbegin = new ListView<>(path, srcNode2+1);
-		ListView<Integer> partAend = new ListView<>(path, 1, srcNode1);  //excludes the first one because it is included in the end of partAbegin
+		ListView<Integer> partAbegin = new ListView<Integer>(path, srcNode2+1);
+		ListView<Integer> partAend = new ListView<Integer>(path, 1, srcNode1);  //excludes the first one because it is included in the end of partAbegin
 		
 		Path newPath = new Path(partAbegin);
 		newPath.addAll(partAend);
 		//System.out.println("\t-> part A: " + newPath);
 		
-		ListView<Integer> partBreverted = new ListView<>(path, srcNode2, srcNode1+1); //isso garante a inversão, pq srcNode2 > srcNode1
+		ListView<Integer> partBreverted = new ListView<Integer>(path, srcNode2, srcNode1+1); //isso garante a inversï¿½o, pq srcNode2 > srcNode1
 
 		newPath.addAll(partBreverted);
 		//System.out.println("\t-> part B reverted: " + partBreverted);
@@ -414,7 +414,7 @@ public class PathBuilder {
 	//PAS: Desafio - implementem esse.
 	/**
 	 * Recebe array srcNodes tal que: para todo i > j --> srcNodes[i] > srcNodes[j].
-	 * Alem disso, invert[i] indica se o trecho que termina em srcNodes[i] vai ou não
+	 * Alem disso, invert[i] indica se o trecho que termina em srcNodes[i] vai ou nï¿½o
 	 * ser invertido (ou seja, se tudo for true, retorna o mesmo caminho).
 	 */
 	public static Path kChange(Path path, int[] srcNodes, boolean[] invert) {

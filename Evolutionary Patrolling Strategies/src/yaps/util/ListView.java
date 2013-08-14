@@ -66,7 +66,7 @@ public class ListView<E> extends AbstractList<E> {
 	}
 	
 	public List<E> createConcatenation(List<E> list) {
-		ArrayList<E> concatenation = new ArrayList<>(this.size() + list.size());
+		ArrayList<E> concatenation = new ArrayList<E>(this.size() + list.size());
 		concatenation.addAll(this);
 		concatenation.addAll(list);
 		return concatenation;
@@ -81,7 +81,7 @@ public class ListView<E> extends AbstractList<E> {
 	}
 	
 	public static void main(String[] args) {
-		LinkedList<Integer> theList = new LinkedList<>();
+		LinkedList<Integer> theList = new LinkedList<Integer>();
 		
 		theList.add(1); theList.add(3);
 		theList.add(5); theList.add(7);
@@ -90,9 +90,9 @@ public class ListView<E> extends AbstractList<E> {
 
 		System.out.println("LISTA ORIGINAL: " + theList + ", tamanho " + theList.size());
 		
-		ListView<Integer> view1 = new ListView<>(theList, 0, 2);  //indices 0 a 2
-		ListView<Integer> view2 = new ListView<>(theList, 4, 4);  //indice 4 apenas
-		ListView<Integer> view3 = new ListView<>(theList, 4);     //do indice 4 em diante
+		ListView<Integer> view1 = new ListView<Integer>(theList, 0, 2);  //indices 0 a 2
+		ListView<Integer> view2 = new ListView<Integer>(theList, 4, 4);  //indice 4 apenas
+		ListView<Integer> view3 = new ListView<Integer>(theList, 4);     //do indice 4 em diante
 		
 		System.out.println("VIEW_1: " + view1 + ", tamanho " + view1.size());
 		System.out.println("VIEW_2: " + view2 + ", tamanho " + view2.size());
@@ -103,9 +103,9 @@ public class ListView<E> extends AbstractList<E> {
 		System.out.println("VIEW_2 + VIEW_1: " + view2.createConcatenation(view1));
 		System.out.println();
 		
-		ListView<Integer> view4 = new ListView<>(theList, 4, true);  //do indice 4 para tras
-		ListView<Integer> view5 = new ListView<>(theList, 4, 0);     //do indice 4 para tras
-		ListView<Integer> view6 = new ListView<>(theList, 6, 4);     //indices 6, 5 e 4 (nesta ordem)
+		ListView<Integer> view4 = new ListView<Integer>(theList, 4, true);  //do indice 4 para tras
+		ListView<Integer> view5 = new ListView<Integer>(theList, 4, 0);     //do indice 4 para tras
+		ListView<Integer> view6 = new ListView<Integer>(theList, 6, 4);     //indices 6, 5 e 4 (nesta ordem)
 		
 		System.out.println("VIEW_4: " + view4 + ", tamanho " + view4.size());
 		System.out.println("VIEW_5: " + view5 + ", tamanho " + view5.size());
