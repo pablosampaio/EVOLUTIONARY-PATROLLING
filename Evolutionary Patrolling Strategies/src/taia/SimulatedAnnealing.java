@@ -20,7 +20,7 @@ public class SimulatedAnnealing extends HillClimb {
 		int iterations = 0;
 		
 		//Generating a random initial solution
-		SimpleIndividual s = this.getIndividualBuilder().buildNewRandomIndividual();
+		SimpleIndividual s = this.getIndividualBuilder().buildNewIndividual();
 		
 		//Random initial solution generated
 

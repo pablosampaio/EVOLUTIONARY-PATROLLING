@@ -18,7 +18,7 @@ public class MuLambdaStrategy {
 	private int factor;
 	private Mutate mut = new Mutate();
 	private MetricFacility mtf = new MetricFacility();
-	private IndividualBuilder indb = new IndividualBuilder();
+	private IndividualBuilder individualBuilder = null;
 	
 	
 	public MuLambdaStrategy(int mu, int lambda){
@@ -69,7 +69,7 @@ public class MuLambdaStrategy {
 
         //PAS: Estranho - escolhe qualquer um como "best"? Funciona, mas foi proposital?
 		for(int i = 0; i < this.lambda; i++){
-			best = this.indb.buildNewRandomIndividual();
+			best = this.individualBuilder.buildNewIndividual();
 			P.add( best );
 		}
 
@@ -127,11 +127,10 @@ public class MuLambdaStrategy {
 		Graph g = GraphReader.readAdjacencyList("./maps/island11", GraphDataRepr.LISTS);
 		
 		
-		
 		MuLambdaStrategy melambe = new MuLambdaStrategy(5, 15);
 		
-		melambe.indb.setGraph(new PreCalculedPathGraph(g));
-		melambe.indb.setUpBuilder();
+		
+		melambe.individualBuilder = new IndividualBuilder((new PreCalculedPathGraph(g)));
 		
 		
 		melambe.doMuLambdaStrategy(1000);

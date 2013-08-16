@@ -2,6 +2,7 @@ package taia;
 
 import java.io.IOException;
 
+import taia.strategies.IndividualBuilder;
 import yaps.graph_library.Graph;
 import yaps.graph_library.GraphDataRepr;
 import yaps.graph_library.GraphReader;
@@ -59,7 +60,7 @@ public class HillClimbWithRandomRestarts extends HillClimb {
 	public SimpleIndividual climbHillWithRandomRestarts(int numberOfIterations, int[] distributionOfTimeIntervals) {
 		
 		//S <- Some initial random candidate solution
-		SimpleIndividual s = this.getIndividualBuilder().buildNewRandomIndividual();
+		SimpleIndividual s = this.getIndividualBuilder().buildNewIndividual();
 		
 		//We have successfully generated a initial random candidate solution
 		
@@ -96,7 +97,7 @@ public class HillClimbWithRandomRestarts extends HillClimb {
 			}
 			
 			//S <- Some initial random candidate solution
-			s = this.getIndividualBuilder().buildNewRandomIndividual();
+			s = this.getIndividualBuilder().buildNewIndividual();
 			
 			//We have successfully generated a new random solution candidate
 			
@@ -124,8 +125,8 @@ public class HillClimbWithRandomRestarts extends HillClimb {
 			distribution[i] = 1000;
 		}
 		
-		randomRestarts.getIndividualBuilder().setNumAgents(3);
-		randomRestarts.getIndividualBuilder().setUpBuilder();
+		randomRestarts.setIndividualBuilder(new IndividualBuilder(randomRestarts.getGraph(), 3));
+		
 		
 		SimpleIndividual finalSolution = randomRestarts.climbHillWithRandomRestarts(15, distribution);
 		

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import taia.util.ListUtil;
 import yaps.graph_library.GraphReader;
@@ -333,7 +334,7 @@ public class AgentMATP {
 	}
 
 
-	public HashSet<Integer> getCoveredNodesSet() {
+	public Set<Integer> getCoveredNodesSet() {
 		return coveredNodesSet;
 	}
 

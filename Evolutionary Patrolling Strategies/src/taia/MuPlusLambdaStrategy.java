@@ -19,7 +19,7 @@ public class MuPlusLambdaStrategy {
 
 	private Mutate mut = new Mutate();
 	private MetricFacility mtf = new MetricFacility();
-	private IndividualBuilder indb = new IndividualBuilder();
+	private IndividualBuilder individualBuilder;
 
 
 	public MuPlusLambdaStrategy(int mu, int lambda){
@@ -34,7 +34,7 @@ public class MuPlusLambdaStrategy {
 		insertOnQ(pi, Q, 0);
 	}
 
-    /* PAS: Este e um procedimento recursivo não muito eficiente.
+    /* PAS: Este e um procedimento recursivo nï¿½o muito eficiente.
      * E melhor inserir tudo no fim e ordenar depois (e.g. com quicksort).
      * Para facilitar, use LinkedList e chame o metodo Collections.sort().
      * A rigor, isso eh um tipo de selecao, que poderia ser incluido na
@@ -75,7 +75,7 @@ public class MuPlusLambdaStrategy {
 
 		//VT&DM Shouldn't be lambda +_mu?
 		for(int i = 0; i < this.lambda; i++){
-			best = this.indb.buildNewRandomIndividual();
+			best = this.individualBuilder.buildNewIndividual();
 			P.add( best );
 		}
 
@@ -132,8 +132,8 @@ public class MuPlusLambdaStrategy {
 
 	
 		MuPlusLambdaStrategy melambe = new MuPlusLambdaStrategy(5, 15);
-		melambe.indb.setGraph(new PreCalculedPathGraph(g));
-		melambe.indb.setUpBuilder();
+		melambe.individualBuilder = new IndividualBuilder(new PreCalculedPathGraph(g));
+		
 		
 		melambe.doMuLambdaStrategy(1000);
 

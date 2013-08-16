@@ -8,7 +8,7 @@ import taia.SimpleIndividual;
 import taia.util.ListUtil;
 import yaps.util.RandomUtil;
 
-/* PAS: Faltou o principal: tournment (com um parâmetro k).
+/* PAS: Faltou o principal: tournment (com um parï¿½metro k).
  * Pensar: criar como subclasses?
  */
 public class Selection {
@@ -124,9 +124,20 @@ public class Selection {
 	
 	
 	
-	//FIXME implement selection!!!!!!!!!!!!!!!
+	
 	public static SimpleIndividual bestFitnessSelection(SimpleIndividual[] P){
-		return P[0];
+		
+		//VT&DM Yes, you can do better.....
+		ArrayList<SimpleIndividual> t = new ArrayList<SimpleIndividual>( P.length );
+		
+		for(SimpleIndividual p: P){
+			t.add(p);
+		}
+		
+		Collections.sort(t);
+	
+		return t.get(0);
+		
 	}
 
 	public static SimpleIndividual FitnessProportionateSelection(SimpleIndividual[] individuals, double[] props){
@@ -208,7 +219,7 @@ public class Selection {
 
 	}
 
-	//PAS: Deveria selecionar k distintos (sem repetição).
+	//PAS: Deveria selecionar k distintos (sem repetiï¿½ï¿½o).
 	public static SimpleIndividual randomFitnessBasedTournamentSelection(SimpleIndividual[] P, int tournamentSize){
 		
 		

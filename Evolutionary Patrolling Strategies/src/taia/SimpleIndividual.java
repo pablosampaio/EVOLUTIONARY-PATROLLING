@@ -21,8 +21,22 @@ public class SimpleIndividual implements Comparable<SimpleIndividual>{
 		this.metricValue = metricValue;
 	}
 
+	private SimpleIndividual(){}
+	
 
-
+	public static SimpleIndividual buildIndividualData(List<Integer> fixedNodeList, HashMap<Integer, AgentMATP> agents, PreCalculedPathGraph graph){
+		
+		SimpleIndividual i = new SimpleIndividual();
+		
+		i.agentList = fixedNodeList;
+		i.graph = graph;
+		i.agents = agents;
+	
+		return i;
+		
+	}
+	
+	
 	public SimpleIndividual(List<Integer> fixedNodeList, PreCalculedPathGraph graph){
 			
 		agentList = fixedNodeList;
@@ -54,8 +68,8 @@ public class SimpleIndividual implements Comparable<SimpleIndividual>{
 		
 		int numAddedNodes = 0;
 
-		//PAS: (Secundario) Representando as partições com um array? Pode ser inviável para
-		//algoritmos de população em grafos muito grandes...
+		//PAS: (Secundario) Representando as partiï¿½ï¿½es com um array? Pode ser inviï¿½vel para
+		//algoritmos de populaï¿½ï¿½o em grafos muito grandes...
 		HashMap<Integer, boolean[]> marksList = new HashMap<Integer, boolean[]>();
 		boolean[] nodeMarks = new boolean[graph.getNumNodes()];
 		
@@ -106,8 +120,8 @@ public class SimpleIndividual implements Comparable<SimpleIndividual>{
 				}
 			}
 			
-			//Garante que nenhum indivíduo é inicializado em um caminho de um único nó.
-			//É bem raro, mas pode acontecer devido aos fatores aleatórios
+			//Garante que nenhum indivï¿½duo ï¿½ inicializado em um caminho de um ï¿½nico nï¿½.
+			//ï¿½ bem raro, mas pode acontecer devido aos fatores aleatï¿½rios
 			//Gera bugs mais adiante.
 			while (nodes.size() < 2){
 				Path path = allp.getPath(n, RandomUtil.chooseInteger(0, graph.getNumNodes() - 1));
@@ -120,7 +134,7 @@ public class SimpleIndividual implements Comparable<SimpleIndividual>{
 			}
 			
 			
-			//PAS: (secundario) Tem varias formas de inicializar o ciclo. Esta é uma delas (ok).
+			//PAS: (secundario) Tem varias formas de inicializar o ciclo. Esta ï¿½ uma delas (ok).
 			// Veja que inicializar envolve: 1) de particionar, 2) formar os ciclos.
 			// Seria bom ter varias formas de fazer cada um e parametrizar a escolha delas. 
 			agents.put(n,   new AgentMATP(n, new InducedSubGraph(nodes, graph)));

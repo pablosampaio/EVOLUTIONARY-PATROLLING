@@ -19,7 +19,7 @@ public class HillClimb {
 
 	private Mutate mut = new Mutate();
 	private MetricFacility mtf = new MetricFacility();
-	private IndividualBuilder indb = new IndividualBuilder();
+	private IndividualBuilder individualBuilder = null;
 
 
 	public Mutate getMutate() { return mut;}
@@ -30,9 +30,9 @@ public class HillClimb {
 
 	public void setMetricFacility(MetricFacility mtf) { this.mtf = mtf; }
 
-	public IndividualBuilder getIndividualBuilder() { return indb; 	}
+	public IndividualBuilder getIndividualBuilder() { return individualBuilder; 	}
 
-	public void setIndividualBuilder(IndividualBuilder indb) { this.indb = indb; }
+	public void setIndividualBuilder(IndividualBuilder indb) { this.individualBuilder = indb; }
 
 	
 	public HillClimb(String graphFileName) throws IOException{
@@ -55,8 +55,10 @@ public class HillClimb {
 	public HillClimb(Graph g){
 		this.numOFNodes = g.getNumNodes();
 		this.graph = new PreCalculedPathGraph(g);
-		this.indb.setGraph(graph);
-		this.indb.setUpBuilder();
+		this.individualBuilder = new IndividualBuilder(this.graph);
+		
+		//this.individualBuilder.setGraph(graph);
+		//this.individualBuilder.setUpBuilder();
 	}
 	
 	public int getSimulationTime() {
@@ -118,7 +120,7 @@ public class HillClimb {
 	
 	public SimpleIndividual doHillClimb(int numberIterations) {
 		//Random initial solution generated
-		return doHillClimb(indb.buildNewRandomIndividual(), numberIterations);
+		return doHillClimb(individualBuilder.buildNewIndividual(), numberIterations);
 		
 	}
 	
@@ -139,7 +141,8 @@ public class HillClimb {
 		
 		
 		//ch.indb.setIndividualConstructorParameters(new PreCalculedPathGraph(g));
-		ch.indb.setNumAgents(3);
+		
+		ch.individualBuilder = new IndividualBuilder(new PreCalculedPathGraph(g), 3);
 	
 		SimpleIndividual result = ch.doHillClimb(100000);
 		

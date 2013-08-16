@@ -19,7 +19,7 @@ public class GeneticAlgorithm {
 	private int popSize;
 	private Mutate mut = new Mutate();
 	private MetricFacility mtf = new MetricFacility();
-	private IndividualBuilder indb = new IndividualBuilder();
+	private IndividualBuilder individualBuilder = null;
 	private CrossOver	cross =  new CrossOver();
 	private Selection select = new Selection();
 
@@ -43,7 +43,7 @@ public class GeneticAlgorithm {
 
 		
 		for(int i = 0; i < this.popSize; i++){
-			best = this.indb.buildNewRandomIndividual();
+			best = this.individualBuilder.buildNewIndividual();
 			P[i] = best;
 		}
 
@@ -104,8 +104,7 @@ public class GeneticAlgorithm {
 		
 		
 		GeneticAlgorithm melambe = new GeneticAlgorithm(200);
-		melambe.indb.setGraph(new PreCalculedPathGraph(g));
-		melambe.indb.setUpBuilder();
+		melambe.individualBuilder = new IndividualBuilder(new PreCalculedPathGraph(g));
 		
 		
 		melambe.doEvolvePopulation(1000);

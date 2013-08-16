@@ -1,9 +1,10 @@
-package taia;
+package taia.strategies;
 
 import java.util.HashMap;
-import java.util.LinkedList;
+import java.util.HashSet;
 import java.util.List;
 
+import taia.PreCalculedPathGraph;
 import taia.util.ListUtil;
 import yaps.graph_library.Path;
 import yaps.graph_library.algorithms.AllPairsShortestPaths;
@@ -76,11 +77,11 @@ public class GraphEquipartition {
 			Integer n = nodeArray.get(i), nBest;
 
 			nBest = n;
-			
+
 			List<Integer> neigbors = g.getSuccessors(n);
-			
+
 			for(int j = 0; j < neigbors.size(); j++){
-				
+
 
 				Integer nj = neigbors.get(j);
 
@@ -103,12 +104,12 @@ public class GraphEquipartition {
 				double d = sumDistancies(nodeArray, allPaths);
 
 				nodeArray.set(i, n);
-				
+
 				if(d > dMin){
 					dMin = d;
 					nBest = nj;
 				}
-				
+
 			}
 
 			nodeArray.set(i, nBest);
@@ -138,35 +139,7 @@ public class GraphEquipartition {
 	}
 
 
-	@SuppressWarnings("unused")
-	private static boolean includeNextWithPath(Integer cntr, Integer[] cntrList, List<Integer> ngborList, AllPairsShortestPaths allp){
-
-		while(!ngborList.isEmpty()){
-
-			Integer n = ngborList.remove(0);
-
-			if(cntrList[n].equals(-1)){
-
-				Path p = allp.getPath(cntr, n);
-
-				for(Integer np: p){
-					if(cntrList[np].equals(-1)){
-						cntrList[np] = cntr;
-					}
-				}
-
-				return true;
-			}else{
-				continue;
-			}
-
-		}
-
-		return false;
-	}
-
-
-	public static HashMap<Integer, List<Integer>> fungalColonyPartition(List<Integer> centers, PreCalculedPathGraph g, boolean addPath){
+	public static HashMap<Integer, HashSet<Integer>> fungalColonyPartition(List<Integer> centers, PreCalculedPathGraph g, boolean addPath){
 
 		Integer[] nodeColony = new Integer[g.getNumNodes()]; 
 
@@ -178,23 +151,23 @@ public class GraphEquipartition {
 			}
 		}
 
-		HashMap<Integer, List<Integer>> cntrColony = new
-				HashMap<Integer, List<Integer>>();
-		
+		HashMap<Integer, HashSet<Integer>> cntrColony = new
+				HashMap<Integer, HashSet<Integer>>();
+
 		HashMap<Integer, List<Integer>> cntrNeigbrListMap = new
 				HashMap<Integer, List<Integer>>();
 
 		for(Integer c: centers){
 			cntrNeigbrListMap.put(c, g.getOrderedDistanceList(c));
-			cntrColony.put(c, new LinkedList<Integer>());
+			cntrColony.put(c, new HashSet<Integer>());
 		}
 
 		boolean loop = true;
-		
+
 		while(loop){
 
 			loop = false;
-			
+
 			for(Integer center: centers){
 				List<Integer> cList = cntrNeigbrListMap.get(center);
 
@@ -202,43 +175,98 @@ public class GraphEquipartition {
 					loop = true;
 					continue;
 				}
-							
+
 				loop = loop || false;
 
 			}
 		}
-		
+
 		if(addPath){
 			AllPairsShortestPaths allp = g.getAllPaths();
-			
+
 			for(Integer n: g.getNodesList()){
-				
+
 				Path p = allp.getPath(nodeColony[n], n);
 				
-				for(Integer node: p){
+				cntrColony.get(nodeColony[n]).addAll(p);
 				
-					List<Integer> li = cntrColony.get(nodeColony[n]);
-					
-					if(!li.contains(node)){
-						li.add(node);
-					}
-				}
 			}
 
 		}else{
-			
+
 			for(Integer n: g.getNodesList()){
 				cntrColony.get(nodeColony[n]).add(n);
 			}
-			
+
+		}
+
+		
+		List<Integer> graphNodes = g.getNodesList();
+
+		for(Integer c: centers){
+			while(cntrColony.get(c).size() < 2){
+				Integer destination = ListUtil.chooseAtRandom(graphNodes);
+				Path path = g.getAllPaths().getPath(c, destination);
+				cntrColony.get(c).addAll(path);
+			}
 		}
 		
-		
-		
-	
-		
 		return cntrColony;
-		
+
 	}
-}
+
+
+	
+	public HashMap<Integer, HashSet<Integer>>  simpleIngenueEquipartition(List<Integer> centers, PreCalculedPathGraph g){
+
+		HashMap<Integer, HashSet<Integer> > partition = new HashMap<Integer, HashSet<Integer>>(centers.size());
+		HashSet<Integer> addedNodes = new HashSet<Integer>(g.getNumNodes());
+
+		for(Integer c: centers){
+			addedNodes.add(c);
+			partition.put(c, new HashSet<Integer>());
+			partition.get(c).add(c);
+		}
+
+
+		int k = 0;
+		List<Integer> indexList = RandomUtil.shuffle(centers);
+		List<Integer> graphNodes = g.getNodesList();
+
+		while(addedNodes.size() < g.getNumNodes()){
+
+			Integer source = indexList.get(k);
+			k = (++k) % indexList.size();
+
+			Integer destination = ListUtil.chooseAtRandom(graphNodes);
+
+			while(source.equals(destination)){
+				destination = ListUtil.chooseAtRandom(graphNodes);
+			}
+
+			Path path = g.getAllPaths().getPath(source, destination);
+
+			addedNodes.addAll(path);
+			partition.get(source).addAll(path);
+
+		}
+
+		for(Integer c: centers){
+			while(partition.get(c).size() < 2){
+				Integer destination = ListUtil.chooseAtRandom(graphNodes);
+				Path path = g.getAllPaths().getPath(c, destination);
+				partition.get(c).addAll(path);
+			}
+		}
+
+		return partition; 
+
+	}
+
+} 
+
+
+
+
+
 
