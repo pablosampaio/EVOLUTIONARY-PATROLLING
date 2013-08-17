@@ -17,58 +17,30 @@ public class Selection {
 	private SelectionType  typeForMany = SelectionType.BESTFITNESS;
 	private int tournamentSize = 4;
 	
-	
-
-
-
-
 
 	public SelectionType getTypeForOne() {
 		return typeForOne;
 	}
 
-
-
-
-
 	public void setTypeForOne(SelectionType typeForOne) {
 		this.typeForOne = typeForOne;
 	}
-
-
-
-
 
 	public SelectionType getTypeForMany() {
 		return typeForMany;
 	}
 
-
-
-
-
 	public void setTypeForMany(SelectionType typeForMany) {
 		this.typeForMany = typeForMany;
 	}
-
-
-
-
-
+	
 	public int getTournamentSize() {
 		return tournamentSize;
 	}
 
-
-
-
-
 	public void setTournamentSize(int tournamentSize) {
 		this.tournamentSize = tournamentSize;
 	}
-
-
-
 
 	public SimpleIndividual[] selectManyFromMany(SimpleIndividual[] population, int selectionSize){
 		
@@ -96,12 +68,19 @@ public class Selection {
 			
 			return t.subList(0, selectionSize).toArray(h);
 		
+		case PARETO_BINARY:
+			
+			for(int k = 0; k < selection.length; k++){
+				selection[k] = ParetoFacility.paretoDominationBinaryTournament(population);
+			}
+		
+			return selection;
 		default:
-			break;
+			
+			this.typeForMany = SelectionType.BESTFITNESS;
+			return selectManyFromMany(population, selectionSize);
 		
 		}
-		
-		return null;
 		
 	}
 
@@ -113,13 +92,12 @@ public class Selection {
 			return randomFitnessBasedTournamentSelection(population, this.tournamentSize);
 		case BESTFITNESS:
 			return bestFitnessSelection(population);
+		case PARETO_BINARY:
+			return ParetoFacility.paretoDominationBinaryTournament(population);
 		default:
-			break;
-		
-		}
-		
-		return null;
-		
+			this.typeForOne = SelectionType.BESTFITNESS;
+			return selectOneFromMany(population);		
+		}	
 	}
 	
 	
@@ -218,8 +196,7 @@ public class Selection {
 		return;
 
 	}
-
-	//PAS: Deveria selecionar k distintos (sem repeti��o).
+	
 	public static SimpleIndividual randomFitnessBasedTournamentSelection(SimpleIndividual[] P, int tournamentSize){
 		
 		
@@ -238,9 +215,4 @@ public class Selection {
 			
 		return best;
 	}
-
-	
-
-	
-
 }

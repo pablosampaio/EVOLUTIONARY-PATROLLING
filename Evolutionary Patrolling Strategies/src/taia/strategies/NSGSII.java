@@ -14,10 +14,10 @@ public class NSGSII {
 	private IndividualBuilder individualBuilder = null;
 	private int archiveSize = 20;
 	private int populationSize = 50;
-
+	private BreedStrategy breed;
 	
-	public NSGSII(){
-		
+	public NSGSII(IndividualBuilder ind){
+		this.breed = new BreedStrategy(ind, populationSize);
 	}
 	
 	public NSGSII(int archiveSize, int populationSize){
@@ -52,13 +52,14 @@ public class NSGSII {
 				HashSet<SimpleIndividual> Ri = R.get(i);
 				
 				if((Ri.size() + A.size()) > this.archiveSize){
-					A.addAll(this.paleto.SparsitySelection(this.archiveSize - A.size(), Ri));
+					A.addAll(this.paleto.selectManyBySparsity(this.archiveSize - A.size(), Ri));
+					break;
 				}else{
 					A.addAll(Ri);
 				}
 			}
 			
-			//FIXME falta o selection!!!!!!!!!!
+			P = this.breed.verySimpleBreedStraegy(A);
 			
 			
 		}

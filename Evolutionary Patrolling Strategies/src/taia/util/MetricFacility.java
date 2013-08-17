@@ -75,5 +75,10 @@ public class MetricFacility {
 
 	}
 
+	//FIXME Implementar calculo do range!!!
+	public double getMetricRange(int metricIndex){
+		return 1.0;
+	}
+	
 
 }

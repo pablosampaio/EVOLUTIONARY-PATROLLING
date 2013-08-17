@@ -14,7 +14,7 @@ public class SimpleIndividual implements Comparable<SimpleIndividual>{
 	protected HashMap<Integer, AgentMATP> agents;
 	protected PreCalculedPathGraph graph;
 	protected List<Integer> agentList;
-	private double metricValue;
+	//private double metricValue;
 	private double[] complexMetricValue;
 	
 
@@ -256,24 +256,33 @@ public class SimpleIndividual implements Comparable<SimpleIndividual>{
 	}
 
 	public double getMetricValue() {
-		return metricValue;
+		if(this.complexMetricValue == null){
+			this.complexMetricValue = new double[1];
+			this.complexMetricValue[0] = 0;
+		}
+		
+		return this.complexMetricValue[0];
 	}
 
 	@Override
 	public String toString() {
-		return this.agents.toString() + (metricValue == 0? "": "\nmetric: " + this.metricValue);
+		return this.agents.toString() + (this.getMetricValue() == 0? "": "\nmetric: " + this.getMetricValue());
 	}
 
 	public void setMetricValue(double metricValue) {
-		this.metricValue = metricValue;
+		if(this.complexMetricValue == null){
+			this.complexMetricValue = new double[1];
+		}
+		
+		this.complexMetricValue[0] = metricValue;
 	}
 
 
 	@Override
 	public int compareTo(SimpleIndividual o) {
-		if(this.metricValue < o.metricValue){
+		if(this.getMetricValue() < o.getMetricValue()){
 			return -1;
-		}else if(this.metricValue == o.metricValue){
+		}else if(this.getMetricValue() == o.getMetricValue()){
 			return 0;
 		}
 		return 1;

@@ -12,15 +12,13 @@ public class ParetoFacility {
 	
 	private PaletoSparsitySelectionType selectionType = PaletoSparsitySelectionType.RANDOM;
 	
-	
-	
-	
+
 	public static HashSet<SimpleIndividual> selectRamdom(int numSelected, HashSet<SimpleIndividual> P){
 		return new HashSet<SimpleIndividual>(ListUtil.randomChoose(numSelected, new ArrayList<SimpleIndividual>(P))); 		
 	} 
 	
 	
-	public HashSet<SimpleIndividual> SparsitySelection(int numSelected, HashSet<SimpleIndividual> P){
+	public HashSet<SimpleIndividual> selectManyBySparsity(int numSelected, HashSet<SimpleIndividual> P){
 		
 		switch(this.selectionType){
 		case RANDOM:
