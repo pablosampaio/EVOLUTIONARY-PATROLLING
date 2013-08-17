@@ -15,11 +15,8 @@ public class SimpleIndividual implements Comparable<SimpleIndividual>{
 	protected PreCalculedPathGraph graph;
 	protected List<Integer> agentList;
 	private double metricValue;
-
+	private double[] complexMetricValue;
 	
-	public void setMetricValue(double metricValue) {
-		this.metricValue = metricValue;
-	}
 
 	private SimpleIndividual(){}
 	
@@ -267,6 +264,9 @@ public class SimpleIndividual implements Comparable<SimpleIndividual>{
 		return this.agents.toString() + (metricValue == 0? "": "\nmetric: " + this.metricValue);
 	}
 
+	public void setMetricValue(double metricValue) {
+		this.metricValue = metricValue;
+	}
 
 
 	@Override
@@ -277,6 +277,16 @@ public class SimpleIndividual implements Comparable<SimpleIndividual>{
 			return 0;
 		}
 		return 1;
+	}
+
+
+	public double[] getComplexMetricValue() {
+		return complexMetricValue;
+	}
+
+
+	public void setComplexMetricValue(double[] complexMetricValue) {
+		this.complexMetricValue = complexMetricValue;
 	}
 	
 }
