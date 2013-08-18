@@ -79,6 +79,10 @@ public class MetricFacility {
 	public double getMetricRange(int metricIndex){
 		return 1.0;
 	}
+
+	public ArrayList<Metric> getMetricList() {
+		return metricList;
+	}
 	
 
 }

@@ -6,7 +6,10 @@ import taia.util.ListUtil;
 
 public class CrossOver {
 
-	CrossOverType type = CrossOverType.SIMPLE_RANDOM_OVER;
+	private CrossOverType type = CrossOverType.SIMPLE_RANDOM_CROSSOVER;
+	
+	
+	
 	
 	private SimpleIndividual[] simpleRandomCrossOver(SimpleIndividual i1, SimpleIndividual i2, Integer agent){
 		
@@ -29,7 +32,7 @@ public class CrossOver {
 	
 	public SimpleIndividual[] crossOver(SimpleIndividual i1, SimpleIndividual i2){
 		switch(this.type){
-		case SIMPLE_RANDOM_OVER:
+		case SIMPLE_RANDOM_CROSSOVER:
 			Integer n = ListUtil.chooseAtRandom(i1.getAgentsCentralNodesList());
 			return simpleRandomCrossOver(i1, i2, n);
 		default:
@@ -37,6 +40,10 @@ public class CrossOver {
 		
 		}
 		return null;
+	}
+
+	public void setType(CrossOverType type) {
+		this.type = type;
 	}
 	
 	

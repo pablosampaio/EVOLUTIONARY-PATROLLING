@@ -2,6 +2,8 @@ package taia.strategies;
 
 public enum SelectionType {
 
+	PARETO_SPARSITY_TRUNCATE,
+	PARETO_SPARSITY_TOURNAMENT,
 	PARETO_BINARY,
 	TOURNAMENT,
 	BESTFITNESS;

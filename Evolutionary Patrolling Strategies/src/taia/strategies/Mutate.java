@@ -6,9 +6,13 @@ import yaps.util.RandomUtil;
 
 public class Mutate {
 
-	MutateType type = MutateType.HALFADD_HALFSUB_REBUILD_IMPROVE;
+	private MutateType type = MutateType.HALFADD_HALFSUB_REBUILD_IMPROVE;
 	private int numberOfInprovesAfterChange = 5;
 	
+	
+	public void setMUtateType(MutateType type){
+		this.type = type;
+	}
 	
 	private void halfAdd_halfSub_Rebuild_Improve(SimpleIndividual ind, Integer agent){
 		

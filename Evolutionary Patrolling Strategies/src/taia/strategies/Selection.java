@@ -15,6 +15,7 @@ public class Selection {
 
 	private SelectionType typeForOne = SelectionType.TOURNAMENT;
 	private SelectionType  typeForMany = SelectionType.BESTFITNESS;
+	private ParetoFacility pareto = null;
 	private int tournamentSize = 4;
 	
 
@@ -71,10 +72,18 @@ public class Selection {
 		case PARETO_BINARY:
 			
 			for(int k = 0; k < selection.length; k++){
-				selection[k] = ParetoFacility.paretoDominationBinaryTournament(population);
+				selection[k] = pareto.paretoDominationBinaryTournament(population);
 			}
 		
 			return selection;
+			
+		case PARETO_SPARSITY_TOURNAMENT:
+			return this.pareto.sparsitySelectionTournament(population, selectionSize, tournamentSize);
+			
+
+		case PARETO_SPARSITY_TRUNCATE:
+			return this.pareto.bestSparsitySelection(population, selectionSize);
+			
 		default:
 			
 			this.typeForMany = SelectionType.BESTFITNESS;
@@ -93,7 +102,12 @@ public class Selection {
 		case BESTFITNESS:
 			return bestFitnessSelection(population);
 		case PARETO_BINARY:
-			return ParetoFacility.paretoDominationBinaryTournament(population);
+			return pareto.paretoDominationBinaryTournament(population);
+		case PARETO_SPARSITY_TOURNAMENT:
+			return this.pareto.sparsitySelectionTournament(population, tournamentSize);
+		case PARETO_SPARSITY_TRUNCATE:
+			return this.pareto.bestSparsitySelection(population);
+			
 		default:
 			this.typeForOne = SelectionType.BESTFITNESS;
 			return selectOneFromMany(population);		
@@ -214,5 +228,9 @@ public class Selection {
 		}
 			
 		return best;
+	}
+
+	public void setPareto(ParetoFacility pareto) {
+		this.pareto = pareto;
 	}
 }

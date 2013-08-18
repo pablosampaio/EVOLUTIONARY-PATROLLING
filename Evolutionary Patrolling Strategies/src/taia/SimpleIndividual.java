@@ -266,7 +266,16 @@ public class SimpleIndividual implements Comparable<SimpleIndividual>{
 
 	@Override
 	public String toString() {
-		return this.agents.toString() + (this.getMetricValue() == 0? "": "\nmetric: " + this.getMetricValue());
+		
+		StringBuilder sb = new StringBuilder();
+		
+		sb.append("[");
+		for(double d: this.getComplexMetricValue()){
+			sb.append( " " + d + " ");
+		}
+		sb.append("]");
+		
+		return this.agents.toString() + "\nmetric: " + sb.toString() + "\n";
 	}
 
 	public void setMetricValue(double metricValue) {

@@ -7,11 +7,11 @@ import taia.SimpleIndividual;
 public class BreedStrategy {
 	
 	private int targetPopulationSize;
-	private CrossOver crossOver = new CrossOver();
-	private IndividualBuilder individualBuilder;
-	private Mutate mutate = new Mutate();
+	private CrossOver crossOver = null;
+	private IndividualBuilder individualBuilder = null;
+	private Mutate mutate = null;
 	private Selection select = new Selection();
-	private ParetoFacility pareto = new ParetoFacility();
+	private ParetoFacility pareto = null;
 	
 	public BreedStrategy(IndividualBuilder individualBuilder, int targetPopulationSize) {
 		this.targetPopulationSize = targetPopulationSize;
@@ -24,7 +24,8 @@ public class BreedStrategy {
 		HashSet<SimpleIndividual> newGeneration = new HashSet<SimpleIndividual>(oldGeneration.size());
 		SimpleIndividual[] P = oldGeneration.toArray(new SimpleIndividual[0]);
 		
-		while(newGeneration.size() < oldGeneration.size()){
+		
+		while(newGeneration.size() < targetPopulationSize){
 			
 			SimpleIndividual[] s = this.select.selectManyFromMany(P, 2);
 			s[0] = s[0].copy();
@@ -35,7 +36,7 @@ public class BreedStrategy {
 			this.mutate.mutate(s[0]);
 			this.mutate.mutate(s[1]);
 			
-			if( (oldGeneration.size() - newGeneration.size()) == 1){
+			if( (targetPopulationSize - newGeneration.size()) == 1){
 				newGeneration.add(s[0]);
 				break;
 			}
@@ -49,6 +50,36 @@ public class BreedStrategy {
 	
 	public void setSelection(Selection selection){
 		this.select = selection;
+	}
+
+
+	public void setTargetPopulationSize(int targetPopulationSize) {
+		this.targetPopulationSize = targetPopulationSize;
+	}
+
+
+	public void setCrossOver(CrossOver crossOver) {
+		this.crossOver = crossOver;
+	}
+
+
+	public void setIndividualBuilder(IndividualBuilder individualBuilder) {
+		this.individualBuilder = individualBuilder;
+	}
+
+
+	public void setMutate(Mutate mutate) {
+		this.mutate = mutate;
+	}
+
+
+	public void setSelect(Selection select) {
+		this.select = select;
+	}
+
+
+	public void setPareto(ParetoFacility pareto) {
+		this.pareto = pareto;
 	}
 
 }
