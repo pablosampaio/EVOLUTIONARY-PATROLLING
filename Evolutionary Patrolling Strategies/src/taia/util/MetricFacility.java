@@ -30,6 +30,8 @@ public class MetricFacility {
 		return metricValue;
 	}
 
+	//PAS: Ao inves de "complexFitness", chama de "multiObjectiveFitness", "multiFitness", algo assim... 
+	//     (Rever nos demais lugares tb).
 	public double[] assessComplexFitness(SimpleIndividual ind){
 
 		double[] fitness = new double[this.metricList.size()];

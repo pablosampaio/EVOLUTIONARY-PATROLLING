@@ -118,6 +118,8 @@ public class NSGAII {
 		MetricFacility metrics = new MetricFacility();
 		metrics.addNewMetirc(Metric.MAXIMUM_INTERVAL);
 		metrics.addNewMetirc(Metric.STD_DEV_OF_FREQUENCIES);
+		//PAS: usar AVERAGE_INTERVAL, STD_DEV_OF_FREQUENCIES e STD_DEV_OF_FREQUENCIES
+		//PAS: idealmente, precisamos de experimentos para comparar os resultados dessas tres com QUADR_MEAN_OF_INTERVALS sozinha
 		metrics.setSimulationTime(1000);
 		
 		ParetoFacility pareto = new ParetoFacility(metrics);

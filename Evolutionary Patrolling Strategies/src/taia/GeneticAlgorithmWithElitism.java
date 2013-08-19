@@ -29,7 +29,7 @@ public class GeneticAlgorithmWithElitism {
 
 	public SimpleIndividual doEvolvePopulation(int time){
 
-		
+
 		SimpleIndividual[] P, Q, Elite;
 
 
@@ -50,7 +50,10 @@ public class GeneticAlgorithmWithElitism {
 
 		while(time-- > 0){
 
-
+			/* PAS: Como o livro ja previa, este loop está tomando muito tempo.
+			 * Poderiamos ao menos evitar recalcular fitness ja calculados. 
+			 * Isso pode ser feito dentro de "assesFitness()" talvez.
+			 */
 			for(SimpleIndividual pi: P){
 				this.mtf.assessFitness(pi);
 
@@ -79,7 +82,7 @@ public class GeneticAlgorithmWithElitism {
 				mut.mutate(c[0]);
 				mut.mutate(c[1]);
 
-				
+				//PAS: Ok. Now I got the idea about these indexes. But a commentary wouldn't hurt... 
 				Q[this.elitism + 2*i ] = c[0];
 				Q[this.elitism + 2*i + 1] =  c[1];
 				
@@ -87,7 +90,10 @@ public class GeneticAlgorithmWithElitism {
 
 			P = Q;
 
-
+			//PAS: A simple way to track progress.
+			if ((time+1) % 100 == 0) {
+				System.out.printf("Remaining iterations: %d\n", time);
+			}
 		}
 
 		return best;

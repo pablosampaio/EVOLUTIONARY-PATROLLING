@@ -57,6 +57,7 @@ public class Selection {
 		case BESTFITNESS:
 			
 			//VT&DM Yes, you can do better.....
+			//PAS: It's ok. Let's worry about bigger things for now...
 			ArrayList<SimpleIndividual> t = new ArrayList<SimpleIndividual>( population.length );
 			
 			for(SimpleIndividual p: population){
