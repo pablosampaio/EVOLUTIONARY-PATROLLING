@@ -90,7 +90,7 @@ public class GeneticAlgorithmWithElitism {
 
 			P = Q;
 
-			//PAS: A simple way to track progress.
+			//PAS: A simple way to show progress each 100 iterations.
 			if ((time+1) % 100 == 0) {
 				System.out.printf("Remaining iterations: %d\n", time);
 			}
