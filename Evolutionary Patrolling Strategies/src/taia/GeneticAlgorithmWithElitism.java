@@ -29,7 +29,7 @@ public class GeneticAlgorithmWithElitism {
 
 	public SimpleIndividual doEvolvePopulation(int time){
 
-		
+
 		SimpleIndividual[] P, Q, Elite;
 
 
@@ -50,7 +50,10 @@ public class GeneticAlgorithmWithElitism {
 
 		while(time-- > 0){
 
-
+			/* PAS: Como o livro ja previa, este loop est� tomando muito tempo.
+			 * Poderiamos ao menos evitar recalcular fitness ja calculados. 
+			 * Isso pode ser feito dentro de "assesFitness()" talvez.
+			 */
 			for(SimpleIndividual pi: P){
 				this.mtf.assessFitness(pi);
 
@@ -79,7 +82,11 @@ public class GeneticAlgorithmWithElitism {
 				mut.mutate(c[0]);
 				mut.mutate(c[1]);
 
-				
+				/*
+				 * The indices look strange, we know that. If you look it closely 
+				 * you will be convinced that it is just one (among others) 
+				 * way to visit all empty elements in the list.
+				 */
 				Q[this.elitism + 2*i ] = c[0];
 				Q[this.elitism + 2*i + 1] =  c[1];
 				
@@ -87,7 +94,10 @@ public class GeneticAlgorithmWithElitism {
 
 			P = Q;
 
-
+			//PAS: A simple way to show progress each 100 iterations.
+			if ((time+1) % 100 == 0) {
+				System.out.printf("Remaining iterations: %d\n", time);
+			}
 		}
 
 		return best;

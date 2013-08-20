@@ -217,7 +217,7 @@ public class GraphEquipartition {
 
 
 	
-	public HashMap<Integer, HashSet<Integer>>  simpleIngenueEquipartition(List<Integer> centers, PreCalculedPathGraph g){
+	public static HashMap<Integer, HashSet<Integer>>  naiveRandomEquipartition(List<Integer> centers, PreCalculedPathGraph g){
 
 		HashMap<Integer, HashSet<Integer> > partition = new HashMap<Integer, HashSet<Integer>>(centers.size());
 		HashSet<Integer> addedNodes = new HashSet<Integer>(g.getNumNodes());
@@ -263,6 +263,8 @@ public class GraphEquipartition {
 
 	}
 
+	
+	
 } 
 
 

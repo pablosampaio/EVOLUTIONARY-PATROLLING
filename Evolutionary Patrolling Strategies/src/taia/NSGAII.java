@@ -53,7 +53,7 @@ public class NSGAII {
 		while(time-- > 0){
 			
 			for(SimpleIndividual p: P){
-				this.mtf.assessComplexFitness(p);
+				this.mtf.assessMultiObjectveFitness(p);
 			}			
 			
 			R = this.pareto.FrontRankAssignmentByNondominatingSort(P);
@@ -118,6 +118,11 @@ public class NSGAII {
 		MetricFacility metrics = new MetricFacility();
 		metrics.addNewMetirc(Metric.MAXIMUM_INTERVAL);
 		metrics.addNewMetirc(Metric.STD_DEV_OF_FREQUENCIES);
+		//PAS: usar AVERAGE_INTERVAL, STD_DEV_OF_FREQUENCIES e STD_DEV_OF_FREQUENCIES
+		/* PAS: Idealmente, precisamos comparar os resultados dessas tres com QUADR_MEAN_OF_INTERVALS sozinha.
+		 * Basta salvar em arquivo varios individuos (muitos, produzidos por varias execucoes de varios algoritmos)
+		 * e depois fazer as estatisticas das metricas e os rankings nelas e comparar com os ranks paretto.
+		 */
 		metrics.setSimulationTime(1000);
 		
 		ParetoFacility pareto = new ParetoFacility(metrics);

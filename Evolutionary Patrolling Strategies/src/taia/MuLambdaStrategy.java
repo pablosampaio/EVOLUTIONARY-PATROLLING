@@ -22,9 +22,8 @@ public class MuLambdaStrategy {
 	
 	
 	public MuLambdaStrategy(int mu, int lambda){
-		//Asserts that lambda is multiple of mu
-		//FIXME look for a ceil function for integers
-		this.factor = (lambda/mu + 1);
+
+		this.factor = (int) Math.ceil((1. * lambda)/mu);
 		this.lambda = mu * this.factor;
 		this.mu = mu;
 
