@@ -66,15 +66,17 @@ public class MuLambdaStrategy {
 		
 		SimpleIndividual best = null;
 
-        //PAS: Estranho - escolhe qualquer um como "best"? Funciona, mas foi proposital?
+        
 		for(int i = 0; i < this.lambda; i++){
 			best = this.individualBuilder.buildNewIndividual();
 			P.add( best );
 		}
 
-		/*PAS: Nem precisa desse calculo da metrica, se o valor inicial da metrica for inicializado
-		       com Integer.MAX_VALUE. Tambem fica estranho, mas funciona. 
-		       Neste caso convem explicar aqui em um comentario. */
+		/*
+		 * Dirty and Quick! You could set best to null here and add a null test
+		 * latter to calculate who is the best solution... or you can choose anyone
+		 * here and let the test do his job.  
+		 */
 		this.mtf.assessFitness(best);
 		
 

@@ -8,9 +8,8 @@ import taia.SimpleIndividual;
 import taia.util.ListUtil;
 import yaps.util.RandomUtil;
 
-/* PAS: Faltou o principal: tournment (com um par�metro k).
- * Pensar: criar como subclasses?
- */
+
+
 public class Selection {
 
 	private SelectionType typeForOne = SelectionType.TOURNAMENT;
@@ -57,6 +56,7 @@ public class Selection {
 		case BESTFITNESS:
 			
 			//VT&DM Yes, you can do better.....
+			//PAS: It's ok. Let's worry about bigger things for now...
 			ArrayList<SimpleIndividual> t = new ArrayList<SimpleIndividual>( population.length );
 			
 			for(SimpleIndividual p: population){
