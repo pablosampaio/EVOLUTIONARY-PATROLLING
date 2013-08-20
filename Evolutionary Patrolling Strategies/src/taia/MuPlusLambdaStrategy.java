@@ -35,12 +35,9 @@ public class MuPlusLambdaStrategy {
 
 	public SimpleIndividual doMuLambdaStrategy(int time){
 
-		Set<SimpleIndividual> P;
+		Set<SimpleIndividual> P = new HashSet<SimpleIndividual>(this.lambda);
 
-
-		P = new HashSet<SimpleIndividual>();
-
-		SimpleIndividual[] Q;
+		SimpleIndividual[] Q = new SimpleIndividual[this.lambda];
 		
 		SimpleIndividual best = null;
 
@@ -52,8 +49,12 @@ public class MuPlusLambdaStrategy {
 		this.mtf.assessFitness(best);
 
 		while(time-- > 0){
+			
+			if(time%2 == 0){
+				System.out.println(time + " iterations remainig");
+			}
+			
 
-			Q = new SimpleIndividual[this.mu];
 			int k = 0;
 			
 			for(SimpleIndividual pi: P){
@@ -66,32 +67,25 @@ public class MuPlusLambdaStrategy {
 
 				Q[k] = pi;
 				k++;
-				
-
 			}
 			
-			Q = Selection.muIndividualsBestFitnessSelection(Q, mu);
+			Selection.sortByFitness(Q);
 			
-			P = new HashSet<SimpleIndividual>(this.lambda);
+			P.clear();
 			
-			
-			for(SimpleIndividual qi: Q){
+			for(int i = 0; i < mu; i++){
+				SimpleIndividual qi = Q[i];
 				P.add(qi);
-				for(int i = 0; i < factor; i++){
+				for(int j = 1; j < factor; j++){
 					SimpleIndividual q = qi.copy();
 					this.mut.mutate(q);
 					P.add(q);
 				}
 
 			}
-
-
-
 		}
 
 		return best;
-
-
 
 	}
 
@@ -104,11 +98,11 @@ public class MuPlusLambdaStrategy {
 		Graph g = GraphReader.readAdjacencyList("./maps/island11", GraphDataRepr.LISTS);
 
 	
-		MuPlusLambdaStrategy melambe = new MuPlusLambdaStrategy(5, 15);
+		MuPlusLambdaStrategy melambe = new MuPlusLambdaStrategy(3, 6);
 		melambe.individualBuilder = new IndividualBuilder(new PreCalculedPathGraph(g));
 		
 		
-		melambe.doMuLambdaStrategy(1000);
+		melambe.doMuLambdaStrategy(20);
 
 	}
 

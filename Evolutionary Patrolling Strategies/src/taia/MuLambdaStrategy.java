@@ -6,6 +6,7 @@ import java.util.Set;
 
 import taia.strategies.IndividualBuilder;
 import taia.strategies.Mutate;
+import taia.strategies.Selection;
 import taia.util.MetricFacility;
 import yaps.graph_library.Graph;
 import yaps.graph_library.GraphDataRepr;
@@ -29,40 +30,12 @@ public class MuLambdaStrategy {
 
 	}
 
-	private void insertOnQ(SimpleIndividual pi, SimpleIndividual[] Q){
-		insertOnQ(pi, Q, 0);
-	}
-
-	private void insertOnQ(SimpleIndividual pi, SimpleIndividual[] Q, int i){
-		if(i >= this.mu){
-			return;
-		}
-
-		if(Q[i] == null){
-			Q[i] = pi;
-			return;
-		}
-
-		if(pi.getMetricValue() < Q[i].getMetricValue()){
-			SimpleIndividual pj = Q[i];
-			Q[i] = pi;
-			insertOnQ(pj, Q, i + 1);
-			return;
-		}
-
-		insertOnQ(pi, Q, i + 1);
-		return;
-
-	}
-
 	public SimpleIndividual doMuLambdaStrategy(int time){
 
-		Set<SimpleIndividual> P;
+		Set<SimpleIndividual> P = new HashSet<SimpleIndividual>(this.lambda);
 
-
-		P = new HashSet<SimpleIndividual>();
-
-		SimpleIndividual[] Q;
+		SimpleIndividual[] Q = new SimpleIndividual[this.lambda];
+		SimpleIndividual[] Qs;
 		
 		SimpleIndividual best = null;
 
@@ -82,25 +55,25 @@ public class MuLambdaStrategy {
 
 		while(time-- > 0){
 
-			Q = new SimpleIndividual[this.mu];
+			int k = 0;
 
 			for(SimpleIndividual pi: P){
 				this.mtf.assessFitness(pi);
+				
 				if( best.getMetricValue() > pi.getMetricValue() ){
 					System.out.println("New metric value: " + pi.getMetricValue() );
 					best = pi;
 				}
-
-				insertOnQ(pi, Q);
-
+				
+				Q[k] = pi;
+				k++;
+	
 			}
+					
+			P.clear();
+			Qs = Selection.muIndividualsBestFitnessSelection(Q, mu);
 			
-		
-			
-			P = new HashSet<SimpleIndividual>();
-
-			
-			for(SimpleIndividual qi: Q){
+			for(SimpleIndividual qi: Qs){
 				for(int i = 0; i < factor; i++){
 					SimpleIndividual q = qi.copy();
 					this.mut.mutate(q);
@@ -109,13 +82,9 @@ public class MuLambdaStrategy {
 
 			}
 
-
-
 		}
 
 		return best;
-
-
 
 	}
 

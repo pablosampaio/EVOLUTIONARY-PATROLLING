@@ -172,6 +172,27 @@ public class Selection {
 
 	}
 	
+	
+public static void sortByFitness(SimpleIndividual[] P){
+		
+		for(int i = 0; i < P.length; i++){
+			
+			int choose = i;
+			
+			for(int j = i+1; j < P.length; j++){
+				if(P[choose].getMetricValue() > P[j].getMetricValue()){
+					choose = j;
+				}
+			}
+			
+			SimpleIndividual p = P[choose];
+			P[choose] = P[i];
+			P[i] = p;
+			
+		}
+		
+	}
+	
 	public static SimpleIndividual[] muIndividualsBestFitnessSelection(SimpleIndividual[] P, int mu){
 		
 		SimpleIndividual[] Q = new SimpleIndividual[mu];
