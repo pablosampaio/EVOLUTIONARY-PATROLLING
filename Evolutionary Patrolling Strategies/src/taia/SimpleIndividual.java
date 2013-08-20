@@ -1,13 +1,7 @@
 package taia;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
-import yaps.graph_library.InducedSubGraph;
-import yaps.graph_library.Path;
-import yaps.graph_library.algorithms.AllPairsShortestPaths;
-import yaps.util.RandomUtil;
 
 public class SimpleIndividual implements Comparable<SimpleIndividual>{
 
@@ -15,7 +9,7 @@ public class SimpleIndividual implements Comparable<SimpleIndividual>{
 	protected PreCalculedPathGraph graph;
 	protected List<Integer> agentList;
 	//private double metricValue;
-	private double[] complexMetricValue;
+	private double[] multiObjectiveMetricValues;
 	
 
 	private SimpleIndividual(){}
@@ -34,17 +28,6 @@ public class SimpleIndividual implements Comparable<SimpleIndividual>{
 	}
 	
 	
-	public SimpleIndividual(List<Integer> fixedNodeList, PreCalculedPathGraph graph){
-			
-		agentList = fixedNodeList;
-		this.graph = graph;
-		
-		rebuilIndiviual();
-		
-	}
-	
-
-	
 	private SimpleIndividual(SimpleIndividual other){
 		HashMap<Integer, AgentMATP> clone = new HashMap<Integer, AgentMATP>();
 		for(Integer n: other.agentList){
@@ -58,109 +41,7 @@ public class SimpleIndividual implements Comparable<SimpleIndividual>{
 		
 	}
 	
-	
-	public void rebuilIndiviual(){
 		
-		agents = new HashMap<Integer, AgentMATP>();
-		
-		int numAddedNodes = 0;
-
-		//PAS: (Secundario) Representando as parti��es com um array? Pode ser invi�vel para
-		//algoritmos de popula��o em grafos muito grandes...
-		HashMap<Integer, boolean[]> marksList = new HashMap<Integer, boolean[]>();
-		boolean[] nodeMarks = new boolean[graph.getNumNodes()];
-		
-		AllPairsShortestPaths allp = graph.getAllPaths();
-		
-		for(Integer n: agentList){
-			marksList.put(n, new boolean[graph.getNumNodes()]);
-			marksList.get(n)[n] = true;
-			nodeMarks[n] = true;
-			numAddedNodes++;
-		}
-		
-		//PAS: (Secundario) Esta eh uma maneira perfeitamente valida de inicializar aleatoriamente, 
-		// mas tambem pensei em outra: fazer uma particao exclusiva e so incluir os nos necessarios 
-		// para tornar cada subgrafo conectado. Qual a melhor? Nao sei. So testando... 
-		
-		int k = 0;
-		List<Integer> indexList = RandomUtil.shuffle(this.agentList);
-		
-		while(numAddedNodes < graph.getNumNodes()){
-			
-			Integer node = indexList.get(k);
-			k = (++k) % indexList.size();
-					
-			Path path = allp.getPath(node, RandomUtil.chooseInteger(0, graph.getNumNodes() - 1));
-			
-			for(Integer n: path){
-			
-				if(!marksList.get(node)[n]){
-					marksList.get(node)[n] = true;
-					if(!nodeMarks[n]){
-						nodeMarks[n] = true;
-						numAddedNodes++;
-					}
-				}
-	
-			}
-			
-		}
-		
-		for(Integer n: agentList){
-			
-			ArrayList<Integer> nodes = new ArrayList<Integer>();
-			
-			for(Integer i = 0; i < marksList.get(n).length; i++){
-				if(marksList.get(n)[i]){
-					nodes.add(i);
-				}
-			}
-			
-			//Garante que nenhum indiv�duo � inicializado em um caminho de um �nico n�.
-			//� bem raro, mas pode acontecer devido aos fatores aleat�rios
-			//Gera bugs mais adiante.
-			while (nodes.size() < 2){
-				Path path = allp.getPath(n, RandomUtil.chooseInteger(0, graph.getNumNodes() - 1));
-				
-				for(Integer p: path){
-					if(!nodes.contains(p)){
-						nodes.add(p);
-					}
-				}
-			}
-			
-			
-			//PAS: (secundario) Tem varias formas de inicializar o ciclo. Esta � uma delas (ok).
-			// Veja que inicializar envolve: 1) de particionar, 2) formar os ciclos.
-			// Seria bom ter varias formas de fazer cada um e parametrizar a escolha delas. 
-			agents.put(n,   new AgentMATP(n, new InducedSubGraph(nodes, graph)));
-			
-		}
-
-	} 
-
-	
-
-/*	
-	public void tweak(){
-		
-		Integer agentNode = ListUtil.chooseAtRandom(this.agentList);
-		AgentMATP agent = this.agents.get(agentNode);
-		
-		
-		if(RandomUtil.chooseBoolean()){
-			agent.addRandomNodeAndRebuildPath();
-		}else{
-			agent.removeRandomNodeAndRebuildPath();
-		}
-		
-		
-		agent.twoChangeImprove(10);
-		
-		
-	}*/
-	
 	public AgentMATP getAgentMATP(Integer agent){
 		return this.agents.get(agent);
 	} 
@@ -256,12 +137,12 @@ public class SimpleIndividual implements Comparable<SimpleIndividual>{
 	}
 
 	public double getMetricValue() {
-		if(this.complexMetricValue == null){
-			this.complexMetricValue = new double[1];
-			this.complexMetricValue[0] = 0;
+		if(this.multiObjectiveMetricValues == null){
+			this.multiObjectiveMetricValues = new double[1];
+			this.multiObjectiveMetricValues[0] = 0;
 		}
 		
-		return this.complexMetricValue[0];
+		return this.multiObjectiveMetricValues[0];
 	}
 
 	@Override
@@ -270,7 +151,7 @@ public class SimpleIndividual implements Comparable<SimpleIndividual>{
 		StringBuilder sb = new StringBuilder();
 		
 		sb.append("[");
-		for(double d: this.getComplexMetricValue()){
+		for(double d: this.getMultiObjectiveMetricValues()){
 			sb.append( " " + d + " ");
 		}
 		sb.append("]");
@@ -279,11 +160,11 @@ public class SimpleIndividual implements Comparable<SimpleIndividual>{
 	}
 
 	public void setMetricValue(double metricValue) {
-		if(this.complexMetricValue == null){
-			this.complexMetricValue = new double[1];
+		if(this.multiObjectiveMetricValues == null){
+			this.multiObjectiveMetricValues = new double[1];
 		}
 		
-		this.complexMetricValue[0] = metricValue;
+		this.multiObjectiveMetricValues[0] = metricValue;
 	}
 
 
@@ -298,13 +179,13 @@ public class SimpleIndividual implements Comparable<SimpleIndividual>{
 	}
 
 
-	public double[] getComplexMetricValue() {
-		return complexMetricValue;
+	public double[] getMultiObjectiveMetricValues() {
+		return multiObjectiveMetricValues;
 	}
 
 
-	public void setComplexMetricValue(double[] complexMetricValue) {
-		this.complexMetricValue = complexMetricValue;
+	public void setMultiObjectiveMetricValues(double[] multiObjectiveValues) {
+		this.multiObjectiveMetricValues = multiObjectiveValues;
 	}
 	
 }

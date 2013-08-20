@@ -114,14 +114,27 @@ public class IndividualBuilder {
 			this.setUpBuilder();
 		}
 		
+		HashMap<Integer, HashSet<Integer>> centersHash;
+		HashMap<Integer, AgentMATP> centersAgents;
 		
 		switch(this.partitionType){
 		case RANDOM_START:
-			return new SimpleIndividual(agentList, graph);
+			
+			centersHash = GraphEquipartition.naiveRandomEquipartition(agentList, graph);
+			
+			centersAgents = new HashMap<Integer, AgentMATP>(agentList.size());
+			
+			for(Integer c: agentList){
+				AgentMATP a = this.buildAgentMATP(c, centersHash.get(c));
+				centersAgents.put(c, a);
+			}
+			
+			return SimpleIndividual.buildIndividualData(agentList, centersAgents, graph);
 		case FUNGAE_COLONY:
-			HashMap<Integer, HashSet<Integer>> centersHash = GraphEquipartition.fungalColonyPartition(agentList, graph, true);
+			
+			centersHash = GraphEquipartition.fungalColonyPartition(agentList, graph, true);
 		
-			HashMap<Integer, AgentMATP> centersAgents = new HashMap<Integer, AgentMATP>(agentList.size());
+			centersAgents = new HashMap<Integer, AgentMATP>(agentList.size());
 
 			
 			for(Integer c: agentList){

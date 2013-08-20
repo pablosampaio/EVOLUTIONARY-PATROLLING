@@ -30,8 +30,8 @@ public class ParetoFacility {
 		
 		boolean a = false;
 		
-		double[] A = i1.getComplexMetricValue();
-		double[] B = i2.getComplexMetricValue();
+		double[] A = i1.getMultiObjectiveMetricValues();
+		double[] B = i2.getMultiObjectiveMetricValues();
 		
 		
 		for(int i = 0; i < A.length; i++){
@@ -63,7 +63,7 @@ public class ParetoFacility {
 			
 
 			for(int i = 0; i < F.size(); i++){
-				meansureArray[i] = F.get(i).getComplexMetricValue()[metricIndex];
+				meansureArray[i] = F.get(i).getMultiObjectiveMetricValues()[metricIndex];
 			}
 			
 			
@@ -75,8 +75,8 @@ public class ParetoFacility {
 			
 			for(int j = 1; j < F.size() - 1; j++){
 				double f = sparsity.get(Fsorted.get(j));
-				double obj_prev = Fsorted.get(j - 1).getComplexMetricValue()[metricIndex],
-						obj_post = Fsorted.get(j + 1).getComplexMetricValue()[metricIndex];
+				double obj_prev = Fsorted.get(j - 1).getMultiObjectiveMetricValues()[metricIndex],
+						obj_post = Fsorted.get(j + 1).getMultiObjectiveMetricValues()[metricIndex];
 				
 				f += ( (obj_post - obj_prev)/metrics.getMetricRange(metricIndex) );
 				

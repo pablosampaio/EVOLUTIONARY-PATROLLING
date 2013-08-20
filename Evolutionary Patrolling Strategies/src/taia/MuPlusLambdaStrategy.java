@@ -6,6 +6,7 @@ import java.util.Set;
 
 import taia.strategies.IndividualBuilder;
 import taia.strategies.Mutate;
+import taia.strategies.Selection;
 import taia.util.MetricFacility;
 import yaps.graph_library.Graph;
 import yaps.graph_library.GraphDataRepr;
@@ -19,48 +20,18 @@ public class MuPlusLambdaStrategy {
 
 	private Mutate mut = new Mutate();
 	private MetricFacility mtf = new MetricFacility();
+	public Selection select = new Selection();
 	private IndividualBuilder individualBuilder;
 
 
 	public MuPlusLambdaStrategy(int mu, int lambda){
-		//Asserts that lambda is multiple of mu
-		//FIXME look for a ceil function for integers
-		this.factor = (lambda/mu + 1);
+
+		this.factor = (int)Math.ceil((1. * lambda)/mu);
 		this.lambda = mu * this.factor;
 		this.mu = mu;
 	}
 
-	private void insertOnQ(SimpleIndividual pi, SimpleIndividual[] Q){
-		insertOnQ(pi, Q, 0);
-	}
 
-    /* PAS: Este e um procedimento recursivo n�o muito eficiente.
-     * E melhor inserir tudo no fim e ordenar depois (e.g. com quicksort).
-     * Para facilitar, use LinkedList e chame o metodo Collections.sort().
-     * A rigor, isso eh um tipo de selecao, que poderia ser incluido na
-     * classe Selection.
-     */
-	private void insertOnQ(SimpleIndividual pi, SimpleIndividual[] Q, int i){
-		if(i >= this.mu){
-			return;
-		}
-
-		if(Q[i] == null){
-			Q[i] = pi;
-			return;
-		}
-
-		if(pi.getMetricValue() < Q[i].getMetricValue()){
-			SimpleIndividual pj = Q[i];
-			Q[i] = pi;
-			insertOnQ(pj, Q, i + 1);
-			return;
-		}
-
-		insertOnQ(pi, Q, i + 1);
-		return;
-
-	}
 
 	public SimpleIndividual doMuLambdaStrategy(int time){
 
@@ -73,7 +44,6 @@ public class MuPlusLambdaStrategy {
 		
 		SimpleIndividual best = null;
 
-		//VT&DM Shouldn't be lambda +_mu?
 		for(int i = 0; i < this.lambda; i++){
 			best = this.individualBuilder.buildNewIndividual();
 			P.add( best );
@@ -84,7 +54,8 @@ public class MuPlusLambdaStrategy {
 		while(time-- > 0){
 
 			Q = new SimpleIndividual[this.mu];
-
+			int k = 0;
+			
 			for(SimpleIndividual pi: P){
 				this.mtf.assessFitness(pi);
 				
@@ -93,13 +64,15 @@ public class MuPlusLambdaStrategy {
 					best = pi;
 				}
 
-				insertOnQ(pi, Q);
+				Q[k] = pi;
+				k++;
+				
 
 			}
 			
-		
+			Q = Selection.muIndividualsBestFitnessSelection(Q, mu);
 			
-			P = new HashSet<SimpleIndividual>();
+			P = new HashSet<SimpleIndividual>(this.lambda);
 			
 			
 			for(SimpleIndividual qi: Q){

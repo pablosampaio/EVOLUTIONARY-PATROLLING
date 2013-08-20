@@ -8,9 +8,8 @@ import taia.SimpleIndividual;
 import taia.util.ListUtil;
 import yaps.util.RandomUtil;
 
-/* PAS: Faltou o principal: tournment (com um par�metro k).
- * Pensar: criar como subclasses?
- */
+
+
 public class Selection {
 
 	private SelectionType typeForOne = SelectionType.TOURNAMENT;

@@ -53,7 +53,7 @@ public class NSGAII {
 		while(time-- > 0){
 			
 			for(SimpleIndividual p: P){
-				this.mtf.assessComplexFitness(p);
+				this.mtf.assessMultiObjectveFitness(p);
 			}			
 			
 			R = this.pareto.FrontRankAssignmentByNondominatingSort(P);

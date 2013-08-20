@@ -50,7 +50,7 @@ public class GeneticAlgorithmWithElitism {
 
 		while(time-- > 0){
 
-			/* PAS: Como o livro ja previa, este loop está tomando muito tempo.
+			/* PAS: Como o livro ja previa, este loop estï¿½ tomando muito tempo.
 			 * Poderiamos ao menos evitar recalcular fitness ja calculados. 
 			 * Isso pode ser feito dentro de "assesFitness()" talvez.
 			 */
@@ -82,7 +82,11 @@ public class GeneticAlgorithmWithElitism {
 				mut.mutate(c[0]);
 				mut.mutate(c[1]);
 
-				//PAS: Ok. Now I got the idea about these indexes. But a commentary wouldn't hurt... 
+				/*
+				 * The indices look strange, we know that. If you look it closely 
+				 * you will be convinced that it is just one (among others) 
+				 * way to visit all empty elements in the list.
+				 */
 				Q[this.elitism + 2*i ] = c[0];
 				Q[this.elitism + 2*i + 1] =  c[1];
 				
