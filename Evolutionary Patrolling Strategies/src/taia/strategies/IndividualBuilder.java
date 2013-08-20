@@ -119,7 +119,6 @@ public class IndividualBuilder {
 		
 		switch(this.partitionType){
 		case RANDOM_START:
-			
 			centersHash = GraphEquipartition.naiveRandomEquipartition(agentList, graph);
 			
 			centersAgents = new HashMap<Integer, AgentMATP>(agentList.size());
@@ -130,8 +129,8 @@ public class IndividualBuilder {
 			}
 			
 			return SimpleIndividual.buildIndividualData(agentList, centersAgents, graph);
-		case FUNGAE_COLONY:
 			
+		case FUNGAE_COLONY:
 			centersHash = GraphEquipartition.fungalColonyPartition(agentList, graph, true);
 		
 			centersAgents = new HashMap<Integer, AgentMATP>(agentList.size());
