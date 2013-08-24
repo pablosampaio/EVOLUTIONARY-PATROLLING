@@ -10,8 +10,18 @@ public class Mutate {
 	private int numberOfInprovesAfterChange = 5;
 	
 	
+	public Mutate(){}
+	
+	public Mutate(MutateType type){
+		this.type = type;
+	}
+	
 	public void setMUtateType(MutateType type){
 		this.type = type;
+	}
+	
+	public void setNumberOfImprovesTries(int num){
+		this.numberOfInprovesAfterChange = num;
 	}
 	
 	private void halfAdd_halfSub_Rebuild_Improve(SimpleIndividual ind, Integer agent){
