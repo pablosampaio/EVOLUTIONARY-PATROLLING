@@ -82,7 +82,7 @@ public class AgentMATP {
 			this.path.removeFirst();
 			this.path.removeLast();
 
-			Path p = this.inducedSubGraph.getAllPaths().getPath(this.path.peekLast(), this.path.peekFirst());
+			Path p = this.inducedSubGraph.getFatherGraph().getAllPaths().getPath(this.path.peekLast(), this.path.peekFirst());
 
 			p.removeFirst();
 
@@ -92,25 +92,36 @@ public class AgentMATP {
 			}
 
 			this.coveredNodesSet = new HashSet<Integer>(this.path);
-
+			this.inducedSubGraph = new InducedSubGraph(new ArrayList<Integer>(this.coveredNodesSet), this.inducedSubGraph.getFatherGraph());
 			return;
 		}
 
+		
+		if(this.path.get(nodeIndex - 1) == this.path.get(nodeIndex + 1)){
+			this.path.remove(nodeIndex);
+			this.path.remove(nodeIndex);
+			this.coveredNodesSet = new HashSet<Integer>(this.path);
+			this.inducedSubGraph = new InducedSubGraph(new ArrayList<Integer>(this.coveredNodesSet), this.inducedSubGraph.getFatherGraph());
+			return;
+		}
+		
 
-		Path p = this.inducedSubGraph.getAllPaths().getPath( this.path.get(nodeIndex - 1), this.path.get(nodeIndex + 1));
+		Path p = this.inducedSubGraph.getFatherGraph().getAllPaths().getPath( this.path.get(nodeIndex - 1), this.path.get(nodeIndex + 1));
 		p.removeFirst();
 		p.removeLast();
 
 		//x1x - 2 - 3 - 4 -  X1X 
 		this.path.remove(nodeIndex);
-
-		for(Integer np: p){
+		
+		int I = p.size();
+		
+		for(int i = 0; i < I; i++){
 			//do field medal
-			this.path.add(nodeIndex, np);
+			this.path.add(nodeIndex, p.removeLast());
 		}		
 
 		this.coveredNodesSet = new HashSet<Integer>(this.path);
-
+		this.inducedSubGraph = new InducedSubGraph(new ArrayList<Integer>(this.coveredNodesSet), this.inducedSubGraph.getFatherGraph());
 
 	}
 
@@ -160,7 +171,7 @@ public class AgentMATP {
 
 		Path p = fatherG.getAllPaths().getPath(this.path.remove(i), node);
 		this.coveredNodesSet.addAll(p);
-
+		this.inducedSubGraph = new InducedSubGraph(new ArrayList<Integer>(this.coveredNodesSet), this.inducedSubGraph.getFatherGraph());
 		
 		
 		for(int k = 0; k < p.size(); k++){
@@ -213,8 +224,6 @@ public class AgentMATP {
 
 
 	}
-
-
 
 	public void removeRandomNodeAndRebuildPath(){
 

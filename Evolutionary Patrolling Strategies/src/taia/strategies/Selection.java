@@ -241,7 +241,7 @@ public static void sortByFitness(SimpleIndividual[] P){
 		SimpleIndividual best = P[tournamentOrder.get(0)];
 		SimpleIndividual next;
 		
-		for(int i = 1; i < tournamentSize; i++){
+		for(int i = 1; i < tournamentSize && i < P.length; i++){
 			next =  P[tournamentOrder.get(i)];
 			if(next.getMetricValue() < best.getMetricValue()){
 				best = next;
@@ -253,5 +253,11 @@ public static void sortByFitness(SimpleIndividual[] P){
 
 	public void setPareto(ParetoFacility pareto) {
 		this.pareto = pareto;
+	}
+
+	@Override
+	public String toString() {
+		return "Selection [typeForOne=" + typeForOne + ", typeForMany="
+				+ typeForMany + ", tournamentSize=" + tournamentSize + "]";
 	}
 }

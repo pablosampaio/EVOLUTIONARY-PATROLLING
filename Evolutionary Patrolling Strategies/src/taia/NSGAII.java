@@ -140,7 +140,7 @@ public class NSGAII {
 		select.setPareto(pareto);
 		
 		Mutate mutate = new Mutate();
-		mutate.setMUtateType(MutateType.HALFADD_HALFSUB_REBUILD_IMPROVE);
+		mutate.setMutateType(MutateType.HALFADD_HALFSUB_REBUILD_IMPROVE);
 		
 		CrossOver cross = new CrossOver();
 		cross.setType(CrossOverType.SIMPLE_RANDOM_CROSSOVER);

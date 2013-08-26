@@ -3,6 +3,8 @@ package taia;
 import java.io.IOException;
 
 import taia.strategies.IndividualBuilder;
+import taia.strategies.Mutate;
+import taia.util.MetricFacility;
 import yaps.graph_library.Graph;
 import yaps.graph_library.GraphDataRepr;
 import yaps.graph_library.GraphReader;
@@ -42,6 +44,10 @@ public class HillClimbWithRandomRestarts extends HillClimb {
 		
 	}
 
+	public HillClimbWithRandomRestarts(PreCalculedPathGraph g, MetricFacility metricFacility, Mutate mutate, IndividualBuilder indB){
+		super(g, metricFacility, mutate, indB);
+	}
+	
 	/*public int[] getDistributionOfTimeIntervals() {
 		
 		if(this.distributionOfTimeIntervals == null){

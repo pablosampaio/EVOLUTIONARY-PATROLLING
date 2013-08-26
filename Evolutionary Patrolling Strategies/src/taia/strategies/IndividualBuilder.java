@@ -180,5 +180,15 @@ public class IndividualBuilder {
 	public void setPathBuilderType(IndividualBuilderPathConstructorType type) {
 		this.pathType = type;
 	}
+
+
+
+	@Override
+	public String toString() {
+		return "IndividualBuilder [numAgents=" + numAgents
+				+ ", agentList=" + agentList + ", centerType=" + centerType
+				+ ", partitionType=" + partitionType + ", pathType=" + pathType
+				+ "]";
+	}
 	
 }

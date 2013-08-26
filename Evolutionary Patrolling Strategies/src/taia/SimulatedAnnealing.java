@@ -2,6 +2,9 @@ package taia;
 
 import java.io.IOException;
 
+import taia.strategies.IndividualBuilder;
+import taia.strategies.Mutate;
+import taia.util.MetricFacility;
 import yaps.graph_library.Graph;
 import yaps.graph_library.GraphDataRepr;
 import yaps.graph_library.GraphReader;
@@ -13,6 +16,11 @@ public class SimulatedAnnealing extends HillClimb {
 
 	public SimulatedAnnealing(Graph g, int simulationTime) {
 		super(g, simulationTime);
+	}
+	
+	
+	public SimulatedAnnealing(PreCalculedPathGraph g, MetricFacility metricFacility, Mutate mutate, IndividualBuilder indB){
+		super(g, metricFacility, mutate, indB);
 	}
 	
 	public SimpleIndividual simulatedAnnealing(int numberOfIterations, double temperature, double tDecreaseFactor) {
@@ -29,9 +37,10 @@ public class SimulatedAnnealing extends HillClimb {
 		SimpleIndividual best = s;
 		double qualityOfBest = qualityOfS;
 		
-		System.out.println("Initial Best Individual: "+best+"\n"+
+		System.out.println("Initial value: " + qualityOfBest);
+/*		System.out.println("Initial Best Individual: "+best+"\n"+
 							"Initial Best Metric Value: "+qualityOfBest
-							);
+							);*/
 		
 		SimpleIndividual r = null;
 		
@@ -61,9 +70,10 @@ public class SimulatedAnnealing extends HillClimb {
 			if(qualityOfS < qualityOfBest) {
 				best = s;
 				qualityOfBest = qualityOfS;
-				System.out.println("\nRecently found best individual: "+best+"\n"+
+				System.out.println("New metric value: " + qualityOfBest);
+/*				System.out.println("\nRecently found best individual: "+best+"\n"+
 						"Recently found best metric value: "+qualityOfBest
-						);
+						);*/
 			}		
 			
 		}while(--numberOfIterations > 0 && temperature >= 0.0);

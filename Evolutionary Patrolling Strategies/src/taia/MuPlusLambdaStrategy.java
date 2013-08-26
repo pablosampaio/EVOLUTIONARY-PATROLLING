@@ -31,7 +31,16 @@ public class MuPlusLambdaStrategy {
 		this.mu = mu;
 	}
 
+	public MuPlusLambdaStrategy(Mutate mutate, MetricFacility mtf, IndividualBuilder indB, int mu, int lambda){
+		
+		this(mu, lambda);
+		this.mut = mutate;
+		this.mtf = mtf;
+		this.individualBuilder = indB;
+		
 
+	}
+	
 
 	public SimpleIndividual doMuLambdaStrategy(int time){
 
@@ -49,12 +58,7 @@ public class MuPlusLambdaStrategy {
 		this.mtf.assessFitness(best);
 
 		while(time-- > 0){
-			
-			if(time%2 == 0){
-				System.out.println(time + " iterations remainig");
-			}
-			
-
+		
 			int k = 0;
 			
 			for(SimpleIndividual pi: P){
@@ -104,6 +108,10 @@ public class MuPlusLambdaStrategy {
 		
 		melambe.doMuLambdaStrategy(20);
 
+	}
+
+	public int getLambda() {
+		return lambda;
 	}
 
 }

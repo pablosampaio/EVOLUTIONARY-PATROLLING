@@ -35,15 +35,21 @@ public class CrossOver {
 		case SIMPLE_RANDOM_CROSSOVER:
 			Integer n = ListUtil.chooseAtRandom(i1.getAgentsCentralNodesList());
 			return simpleRandomCrossOver(i1, i2, n);
+		
 		default:
-			break;
+			this.type = CrossOverType.SIMPLE_RANDOM_CROSSOVER;
+			return crossOver(i1, i2);
 		
 		}
-		return null;
 	}
 
 	public void setType(CrossOverType type) {
 		this.type = type;
+	}
+
+	@Override
+	public String toString() {
+		return "CrossOver [type=" + type + "]";
 	}
 	
 	

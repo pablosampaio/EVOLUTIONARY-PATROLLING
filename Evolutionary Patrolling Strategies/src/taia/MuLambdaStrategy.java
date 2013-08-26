@@ -21,6 +21,17 @@ public class MuLambdaStrategy {
 	private MetricFacility mtf = new MetricFacility();
 	private IndividualBuilder individualBuilder = null;
 	
+	public MuLambdaStrategy(){}
+	
+	public MuLambdaStrategy(Mutate mutate, MetricFacility mtf, IndividualBuilder indB, int mu, int lambda){
+		
+		this(mu, lambda);
+		this.mut = mutate;
+		this.mtf = mtf;
+		this.individualBuilder = indB;
+		
+
+	}
 	
 	public MuLambdaStrategy(int mu, int lambda){
 
@@ -105,6 +116,10 @@ public class MuLambdaStrategy {
 		
 		melambe.doMuLambdaStrategy(1000);
 
+	}
+
+	public int getLambda() {
+		return lambda;
 	}
 
 }

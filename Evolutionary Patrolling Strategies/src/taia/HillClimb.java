@@ -15,13 +15,14 @@ public class HillClimb {
 	private int numOFNodes;
 	private PreCalculedPathGraph graph;
 	
-	private double bestMetric;
 
 	private Mutate mut = new Mutate();
 	private MetricFacility mtf = new MetricFacility();
 	private IndividualBuilder individualBuilder = null;
 
 
+	private double bestMetric;
+	
 	public Mutate getMutate() { return mut;}
 
 	public void setMutate(Mutate mut) { this.mut = mut; }
@@ -59,6 +60,14 @@ public class HillClimb {
 		
 		//this.individualBuilder.setGraph(graph);
 		//this.individualBuilder.setUpBuilder();
+	}
+	
+	public HillClimb(PreCalculedPathGraph g, MetricFacility metricFacility, Mutate mutate, IndividualBuilder indB){
+		this.graph = g;
+		this.individualBuilder = indB;
+		this.mut = mutate;
+		this.mtf = metricFacility;
+		this.simulationTime = metricFacility.getSimulationTime();
 	}
 	
 	public int getSimulationTime() {

@@ -23,9 +23,19 @@ public class GeneticAlgorithm {
 	private CrossOver	cross =  new CrossOver();
 	private Selection select = new Selection();
 
+	public GeneticAlgorithm(Mutate mutate, MetricFacility mtf, IndividualBuilder indB, CrossOver cross, Selection select, int popSize){
+		
+		this(popSize);
+		this.mut = mutate;
+		this.mtf = mtf;
+		this.individualBuilder = indB;
+		this.cross = cross;
+		this.select = select;
+	
+	}
 	
 	public GeneticAlgorithm(int popSize){
-		this.popSize = 2 * (popSize/2 + 1);
+		this.popSize = 2 * ((int) Math.ceil((1. * popSize)/2));
 	}
 
 	public SimpleIndividual doEvolvePopulation(int time){
@@ -109,6 +119,10 @@ public class GeneticAlgorithm {
 		
 		melambe.doEvolvePopulation(1000);
 
+	}
+
+	public int getPopulationSize() {
+		return this.popSize;
 	}
 
 }

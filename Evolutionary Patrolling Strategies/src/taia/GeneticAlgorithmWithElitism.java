@@ -22,9 +22,20 @@ public class GeneticAlgorithmWithElitism {
 	private int elitism;
 
 	
+	public GeneticAlgorithmWithElitism(Mutate mutate, MetricFacility mtf, IndividualBuilder indB, CrossOver cross, Selection select, int popSize, int elitism){
+		
+		this(popSize, elitism);
+		this.mut = mutate;
+		this.mtf = mtf;
+		this.individualBuilder = indB;
+		this.cross = cross;
+		this.select = select;
+	
+	}
+	
 	public GeneticAlgorithmWithElitism(int popSize, int elistism){
 		this.elitism = elistism;
-		this.popSize = elistism + 2 * ((popSize - elistism)/2 + 1);
+		this.popSize = elistism + 2 * ((int) Math.ceil((1. * popSize)/2));;
 	}
 
 	public SimpleIndividual doEvolvePopulation(int time){
@@ -120,6 +131,10 @@ public class GeneticAlgorithmWithElitism {
 		
 		melambe.doEvolvePopulation(1000);
 
+	}
+
+	public int getPopSize() {
+		return popSize;
 	}
 
 }
