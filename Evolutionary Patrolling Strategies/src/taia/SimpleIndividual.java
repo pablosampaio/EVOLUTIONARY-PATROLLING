@@ -10,7 +10,8 @@ public class SimpleIndividual implements Comparable<SimpleIndividual>{
 	protected List<Integer> agentList;
 	//private double metricValue;
 	private double[] multiObjectiveMetricValues;
-	
+
+	//PAS: Falta implementar a função hashCode(), para usar adequadamente em HashSets (como no MuLambda).
 
 	private SimpleIndividual(){}
 	

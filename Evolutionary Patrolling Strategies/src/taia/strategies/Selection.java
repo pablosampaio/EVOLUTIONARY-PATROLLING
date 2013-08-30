@@ -11,7 +11,9 @@ import yaps.util.RandomUtil;
 
 
 public class Selection {
-
+	//PAS: Ficaria mais claro ter um tipo só, seja para escolher 1 ou vários.
+	//A classe que precisasse de diferentes tipos de seleção, explicitamente 
+	//criaria diferentes instâncias.
 	private SelectionType typeForOne = SelectionType.TOURNAMENT;
 	private SelectionType  typeForMany = SelectionType.BESTFITNESS;
 	private ParetoFacility pareto = null;

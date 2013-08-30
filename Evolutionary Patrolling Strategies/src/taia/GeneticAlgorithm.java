@@ -110,11 +110,11 @@ public class GeneticAlgorithm {
 	 */
 	public static void main(String[] args) throws IOException {
 
-		Graph g = GraphReader.readAdjacencyList("./maps/island11", GraphDataRepr.LISTS);
+		Graph g = GraphReader.readAdjacencyList("./maps/map_a.adj", GraphDataRepr.LISTS);
 		
 		
 		GeneticAlgorithm melambe = new GeneticAlgorithm(200);
-		melambe.individualBuilder = new IndividualBuilder(new PreCalculedPathGraph(g));
+		melambe.individualBuilder = new IndividualBuilder(new PreCalculedPathGraph(g), 3);
 		
 		
 		melambe.doEvolvePopulation(1000);

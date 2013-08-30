@@ -78,7 +78,7 @@ public class ParetoFacility {
 				double obj_prev = Fsorted.get(j - 1).getMultiObjectiveMetricValues()[metricIndex],
 						obj_post = Fsorted.get(j + 1).getMultiObjectiveMetricValues()[metricIndex];
 				
-				f += ( (obj_post - obj_prev)/metrics.getMetricRange(metricIndex) );
+				f += ( (obj_post - obj_prev)/metrics.getMetricRange(metricIndex) ); //PAS: lembrar: sem implementar o range, ainda nao esta 100% correto
 				
 				sparsity.put(Fsorted.get(j),f);
 				

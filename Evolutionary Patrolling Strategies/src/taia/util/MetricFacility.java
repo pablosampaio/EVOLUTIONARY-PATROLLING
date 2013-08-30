@@ -11,7 +11,8 @@ import yaps.metrics.VisitsList;
 public class MetricFacility {
 
 	private ArrayList<Metric> metricList = null;
-	private Metric metric =  Metric.MAXIMUM_INTERVAL;
+	private Metric metric =  Metric.MAXIMUM_INTERVAL; //PAS: Sugestão: remover este atributo e considerar a métrica 
+	                                                  //     do indice 0 da lista de metricas como a metrica dos casos mono-objetivo.
 	private int simulationTime = 10000;
 
 	public static VisitsList fromClosedPathToVisitList(Path p, AllPairsShortestPaths allPaths, int time, int agent){
@@ -49,6 +50,7 @@ public class MetricFacility {
 	}
 
 	public double assessFitness( SimpleIndividual ind){
+		//PAS: Nao recalcular se ja tiver sido calculado (isso pode ajudar a melhorar o tempo dos algoritmos mais "steady-state")
 		double metricValue = metric.calculate( this.generateVisitList(ind), ind.getGraph().getNumNodes(), 1, simulationTime);
 		ind.setMetricValue(metricValue);
 		return metricValue;

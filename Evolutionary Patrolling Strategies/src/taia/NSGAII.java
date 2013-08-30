@@ -59,6 +59,10 @@ public class NSGAII {
 			R = this.pareto.FrontRankAssignmentByNondominatingSort(P);
 			
 			best = R.get(0);
+			if ((time+1) % 10 == 0) {
+				System.out.println("Iteracoes restantes " + time);
+				printParetoFront(best);
+			}
 			
 			HashSet<SimpleIndividual> A = new HashSet<SimpleIndividual>();
 			
@@ -82,6 +86,20 @@ public class NSGAII {
 		return best;
 	}
 	
+	private void printParetoFront(HashSet<SimpleIndividual> front) {
+		System.out.println("Pareto front size: " + front.size());
+		for (SimpleIndividual i : front) {
+			double[] metrics = i.getMultiObjectiveMetricValues();
+	
+			System.out.print(" > "); 
+			for (int j = 0; j < metrics.length; j++) {
+				System.out.printf("%6.3f |", metrics[j]);	
+			}
+			
+			System.out.println();
+		}
+	}
+
 	public void setPareto(ParetoFacility pareto) {
 		this.pareto = pareto;
 	}
@@ -109,16 +127,17 @@ public class NSGAII {
 	public static void main(String[] args) throws IOException {
 		
 		int arquiveSize = 3;
-		int popSize = 10;
+		int popSize = 100;
 		
 		
 		Graph g = GraphReader.readAdjacencyList("./maps/island11", GraphDataRepr.LISTS);
 		PreCalculedPathGraph pg = new PreCalculedPathGraph(g);
 		
 		MetricFacility metrics = new MetricFacility();
-		metrics.addNewMetirc(Metric.MAXIMUM_INTERVAL);
+		metrics.addNewMetirc(Metric.AVERAGE_INTERVAL);
+		metrics.addNewMetirc(Metric.STD_DEV_OF_INTERVALS);
 		metrics.addNewMetirc(Metric.STD_DEV_OF_FREQUENCIES);
-		//PAS: usar AVERAGE_INTERVAL, STD_DEV_OF_FREQUENCIES e STD_DEV_OF_FREQUENCIES
+
 		/* PAS: Idealmente, precisamos comparar os resultados dessas tres com QUADR_MEAN_OF_INTERVALS sozinha.
 		 * Basta salvar em arquivo varios individuos (muitos, produzidos por varias execucoes de varios algoritmos)
 		 * e depois fazer as estatisticas das metricas e os rankings nelas e comparar com os ranks paretto.
@@ -158,9 +177,7 @@ public class NSGAII {
 		nsga.setMetricFacility(metrics);
 		
 		
-		nsga.doNSGAII(20);
-		
-		
+		nsga.doNSGAII(500);		
 		
 	}
 

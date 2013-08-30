@@ -105,13 +105,13 @@ public class MuLambdaStrategy {
 	 */
 	public static void main(String[] args) throws IOException {
 
-		Graph g = GraphReader.readAdjacencyList("./maps/island11", GraphDataRepr.LISTS);
+		Graph g = GraphReader.readAdjacencyList("./maps/map_a.adj", GraphDataRepr.LISTS);
 		
 		
 		MuLambdaStrategy melambe = new MuLambdaStrategy(5, 15);
 		
 		
-		melambe.individualBuilder = new IndividualBuilder((new PreCalculedPathGraph(g)));
+		melambe.individualBuilder = new IndividualBuilder(new PreCalculedPathGraph(g), 3);
 		
 		
 		melambe.doMuLambdaStrategy(1000);

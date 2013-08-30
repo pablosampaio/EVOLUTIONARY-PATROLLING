@@ -11,7 +11,7 @@ import yaps.graph_library.GraphReader;
 
 public class HillClimb {
 	
-	private int simulationTime = 10000;
+	private int simulationTime = 10000; //PAS: atributo nunca usado? ja esta no MetricFacility
 	private int numOFNodes;
 	private PreCalculedPathGraph graph;
 	
@@ -43,7 +43,7 @@ public class HillClimb {
 	
 	public HillClimb(String graphFileName, int simulationTime) throws IOException{
 		this(GraphReader.readAdjacencyList(graphFileName));
-		this.simulationTime = simulationTime;
+		this.simulationTime = simulationTime; //PAS: precisa receber? setar no MetricFacility?
 
 	}
 

@@ -61,9 +61,9 @@ public class GeneticAlgorithmWithElitism {
 
 		while(time-- > 0){
 
-			/* PAS: Como o livro ja previa, este loop estï¿½ tomando muito tempo.
+			/* PAS: Como o livro ja previa, este loop esta tomando muito tempo.
 			 * Poderiamos ao menos evitar recalcular fitness ja calculados. 
-			 * Isso pode ser feito dentro de "assesFitness()" talvez.
+			 * Isso pode ser feito dentro de "assesFitness()".
 			 */
 			for(SimpleIndividual pi: P){
 				this.mtf.assessFitness(pi);
@@ -80,7 +80,8 @@ public class GeneticAlgorithmWithElitism {
 			Elite = this.select.selectManyFromMany(P, elitism);
 			
 			for(int i = 0; i < this.elitism; i++){
-				Q[i] = Elite[i].copy();
+				Q[i] = Elite[i].copy(); //PAS: 1) Nao precisa ser a copia. Gera overhead e (acho que) apaga o fitness calculado.
+				                        //     2) Bug: ao escrever em Q, está apagando indivíduos de P. (Ver comentario ao final)
 			}
 			 
 			for(int i = 0; i < ((this.popSize - this.elitism)/2); i++){
@@ -103,10 +104,9 @@ public class GeneticAlgorithmWithElitism {
 				
 			}
 
-			P = Q;
+			P = Q; //PAS: Cuidado! A partir deste ponto, P e Q apontam para um mesmo array!
 
-			//PAS: A simple way to show progress each 100 iterations.
-			if ((time+1) % 100 == 0) {
+			if ((time+1) % 10 == 0) {
 				System.out.printf("Remaining iterations: %d\n", time);
 			}
 		}
@@ -123,11 +123,11 @@ public class GeneticAlgorithmWithElitism {
 	 */
 	public static void main(String[] args) throws IOException {
 
-		Graph g = GraphReader.readAdjacencyList("./maps/island11", GraphDataRepr.LISTS);
+		Graph g = GraphReader.readAdjacencyList("./maps/map_a.adj", GraphDataRepr.LISTS);
 		
 		
 		GeneticAlgorithmWithElitism melambe = new GeneticAlgorithmWithElitism(50, 10);
-		melambe.individualBuilder = new IndividualBuilder(new PreCalculedPathGraph(g));
+		melambe.individualBuilder = new IndividualBuilder(new PreCalculedPathGraph(g), 3);
 		
 		melambe.doEvolvePopulation(1000);
 

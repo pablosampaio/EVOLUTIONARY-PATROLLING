@@ -8,6 +8,7 @@ import java.util.List;
 import taia.AgentMATP;
 import taia.PreCalculedPathGraph;
 import taia.SimpleIndividual;
+import taia.util.ListUtil;
 import yaps.graph_library.InducedSubGraph;
 import yaps.graph_library.Path;
 import yaps.graph_library.PathBuilder;
@@ -55,7 +56,7 @@ public class IndividualBuilder {
 			
 			break;
 		case RANDOM:
-			
+			//PAS: usar ListUtil.randomChoose
 			ArrayList<Integer> agentList = new ArrayList<Integer>();
 			
 			for(int i = 0; i < numAgents; i++) {

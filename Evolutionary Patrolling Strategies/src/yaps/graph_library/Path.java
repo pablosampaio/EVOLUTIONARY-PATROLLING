@@ -69,7 +69,7 @@ public class Path extends LinkedList<Integer> {
 	 * not strongly connected).
 	 * <br><br>
 	 * It should return the same value as: <br>
-	 * getCost( expandShortestPaths(path,graph) , graph) .
+	 * expandShortestPaths(shortest).getCost(graph).
 	 */
 	public double getCostExpandingShortestPaths(AllPairsShortestPaths shortest) {
 		int n = this.size();

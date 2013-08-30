@@ -4,6 +4,7 @@ import java.util.HashSet;
 
 import taia.SimpleIndividual;
 
+//PAS: considerando seu uso, acho que toda esta classe poderia ser incluida diretamente no NSGA-II
 public class BreedStrategy {
 	
 	private int targetPopulationSize;

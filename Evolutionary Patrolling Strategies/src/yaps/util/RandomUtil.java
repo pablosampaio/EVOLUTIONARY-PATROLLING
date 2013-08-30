@@ -68,6 +68,7 @@ public class RandomUtil {
 		return rand.nextDouble() <= probTrue;
 	}
 
+	//PAS: mudar isso para ListUtil ou trazer metodos aleatórios de lá para cá?
 	/**
 	 * Randomly shuffles (mixes) a list, returning a new one.
 	 * Fisher-Yattes algorithm. 
